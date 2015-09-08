@@ -29,5 +29,14 @@ In `travis-ci.org` setting page. set three env vars (Copied from qiniu). for exa
 	SECRET_KEY=kljdlFLSDKFJo9iwejflkjLkjsdfoijw4elfkjsd
 	BUCKET=gorelease
 
+## Step3
+Get download address page.
+
+在七牛的 **空间设置/域名设置** 里面把域名拷贝出来. ex: `7xln6q.dl1.z0.glb.clouddn.com`
+
+如你的项目名是 `gorelease`, 地址 <http://10.240.187.174:4000/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master> 即为下载地址页面
+
+Good luck.
+
 ## LICENSE
 [MIT](LICENSE)
