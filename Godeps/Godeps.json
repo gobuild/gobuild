@@ -1,0 +1,19 @@
+{
+	"ImportPath": "gorelease",
+	"GoVersion": "go1.4.2",
+	"Deps": [
+		{
+			"ImportPath": "github.com/Unknwon/com",
+			"Rev": "47d7d2b81a44157600669037e11e9ddfbf16745f"
+		},
+		{
+			"ImportPath": "github.com/Unknwon/macaron",
+			"Rev": "635c89ac7410dd20df967e37e8f7f173e126cedd"
+		},
+		{
+			"ImportPath": "gopkg.in/ini.v1",
+			"Comment": "v0-33-g4633071",
+			"Rev": "463307112d3b6430c54c3dad77b4d0fa745b859c"
+		}
+	]
+}
