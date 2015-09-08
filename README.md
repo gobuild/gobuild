@@ -17,3 +17,6 @@ Save the following content into `.travis.yml`, and put it into your repository.
 	after_success:
 	  - gox -os="linux darwin windows" -output "gorelease-temp/dist/{{.OS}}-{{.Arch}}/{{.Dir}}"
       - bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeskyblue/gorelease/master/scripts/upload-qiniu.sh)"
+
+## LICENSE
+[MIT](LICENSE)
