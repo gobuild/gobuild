@@ -42,9 +42,10 @@ func InitApp(debug bool) *macaron.Macaron {
 	app.Get("/", func(ctx *macaron.Context) {
 		ctx.HTML(200, "homepage")
 	})
-	app.Get("/:domain/:name", func(ctx *macaron.Context) {
+	app.Get("/:domain/:name/:branch", func(ctx *macaron.Context) {
 		ctx.Data["Domain"] = ctx.Params(":domain")
 		ctx.Data["Name"] = ctx.Params(":name")
+		ctx.Data["Branch"] = ctx.Params(":branch")
 		ctx.HTML(200, "release")
 	})
 	return app

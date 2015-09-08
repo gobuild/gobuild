@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div id="page">
-		<h1>gorelease</h1>
+		<h1>{{.Name}} <small>{{.Branch}}</small></h1>
 		<table>
 			<tr>
 				<th>GOOS</th>
@@ -18,14 +18,14 @@
 				<td>linux</td>
 				<td>amd64</td>
 				<td>
-					<a href="http://{{.Domain}}/gorelease/linux-amd64/{{.Name}}">Download</a>
+					<a href="http://{{.Domain}}/gorelease/{{.Branch}}linux-amd64/{{.Name}}">Download</a>
 				</td>
 			</tr>
 			<tr>
 				<td>mac</td>
 				<td>amd64</td>
 				<td>
-					<a href="http://{{.Domain}}/gorelease/darwin-amd64/{{.Name}}">Download</a>
+					<a href="http://{{.Domain}}/gorelease/{{.Branch}}/darwin-amd64/{{.Name}}">Download</a>
 				</td>
 			</tr>
 		</table>

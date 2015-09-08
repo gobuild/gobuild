@@ -15,7 +15,8 @@ ACCESS_KEY=${ACCESS_KEY:?}
 SECRET_KEY=${SECRET_KEY:?}
 BUCKET=${BUCKET:?}
 
-KEY_PREFIX=${PWD##$GOPATH/src/}/
+branch=$(git symbolic-ref --short HEAD)
+KEY_PREFIX=${PWD##$GOPATH/src/}/$branch/
 
 wget -q http://devtools.qiniu.com/qiniu-devtools-${GOOS}_${GOARCH}-current.tar.gz -O- | tar -xz -C $TMPDIR
 
