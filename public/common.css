@@ -1,0 +1,11 @@
+body { color: #323232; font-family: "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,sans-serif; font-size:13px; margin: 0; padding: 0; }
+#page { margin: 0 auto; width: 800px; }
+h2 { font-weight: normal; padding: 0; }
+code { font-family: Monaco,"Lucida Console",monospace; font-size: 12px; }
+pre { padding-left: 2em; }
+
+.social { overflow: hidden; }
+#google, #twitter, #facebook { float: left; margin-right: 2em; }
+#facebook { margin-top: 2px; }
+
+#footer { margin-top: 1em; text-align: right; }
