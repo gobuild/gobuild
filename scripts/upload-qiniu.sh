@@ -18,18 +18,23 @@ BUCKET=${BUCKET:?}
 branch=$(git symbolic-ref --short HEAD)
 KEY_PREFIX=${PWD##$GOPATH/src/}/$branch/
 
-wget -q http://devtools.qiniu.com/qiniu-devtools-${GOOS}_${GOARCH}-current.tar.gz -O- | tar -xz -C $TMPDIR
+go get -v github.com/codeskyblue/qsync
+#wget -q http://devtools.qiniu.com/qiniu-devtools-${GOOS}_${GOARCH}-current.tar.gz -O- | tar -xz -C $TMPDIR
 
 DISTDIR=$TMPDIR/dist
 
-cat > $TMPDIR/conf.json <<EOF
-{
-	"src": "$DISTDIR",
-	"dest": "qiniu:access_key=$ACCESS_KEY&secret_key=$SECRET_KEY&bucket=$BUCKET&key_prefix=$KEY_PREFIX",
-	"debug_level": 1
-}
+cat > $TMPDIR/conf.ini <<EOF
+[qiniu]
+uphost = http://up.qiniug.com
+bucket = $BUCKET
+accesskey = "$ACCESS_KEY"
+secretkey = "$SECRET_KEY"
+keyprefix = $KEY_PREFIX
+
+[local]
+syncdir = $DISTDIR
 EOF
 
 # upload
 /bin/rm -fr $HOME/.qrsync
-$TMPDIR/qrsync $TMPDIR/conf.json
+qsync -c $TMPDIR/conf.ini

@@ -18,5 +18,16 @@ Save the following content into `.travis.yml`, and put it into your repository.
 	  - gox -os="linux darwin windows" -output "gorelease-temp/dist/{{.OS}}-{{.Arch}}/{{.Dir}}"
       - bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeskyblue/gorelease/master/scripts/upload-qiniu.sh)"
 
+## Step2
+You need a account in [QiniuCDN](http://www.qiniu.com)
+
+In `travis-ci.org` setting page. set three env vars (Copied from qiniu). for example
+
+`BUCKET`也就是空间地址, 没有空间的话，选择创建一个新的空间就可以了.
+
+	ACCESS_KEY=LKJFLSkdjfkj23lkjrl23kjflkzsjdfljwerf2w3
+	SECRET_KEY=kljdlFLSDKFJo9iwejflkjLkjsdfoijw4elfkjsd
+	BUCKET=gorelease
+
 ## LICENSE
 [MIT](LICENSE)
