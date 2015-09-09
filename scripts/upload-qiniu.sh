@@ -3,6 +3,9 @@
 # ref travis-ci environment: http://docs.travis-ci.com/user/environment-variables/
 #
 
+test X${GR_VERSION:-$TRAVIS_GO_VERSION} != X${TRAVIS_GO_VERSION} && exit 0
+echo "Go version: $TRAVIS_GO_VERSION"
+
 GOOS=$(go env GOOS)
 GOARCH=$(go env GOARCH)
 
