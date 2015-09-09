@@ -2,8 +2,16 @@
 [![Build Status](https://travis-ci.org/codeskyblue/gorelease.svg?branch=master)](https://travis-ci.org/codeskyblue/gorelease)
 [![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master)
 
-experiment, gobuild5 - for easily public released go binary.
+gorelease - for easily public released go binary.
 
+这个项目是用来帮助发布go的二进制文件。
+
+这种方案是我想出来最稳定的一种方法了。完全依赖于各种开源服务,目前已经证明了这种方法是完全可行的。
+
+* 需要依赖 [travis-ci平台](https://travis-ci.org) 这个搞不好需要翻墙才行。
+* 依赖[七牛](http://qiniu.com) 还有我写的qiniu上传工具 <https://github.com/codeskyblue/qsync>
+* 另外附加上我写的一些脚本. 就在这个项目的[scripts](scripts)目录下
+* 一个简单的发布界面。我托管到了heroku平台,比如[这个项目自身的发布界面](http://gorelease.herokuapp.com/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master)
 
 ## Step1
 Save the following content into `.travis.yml`, and put it into your repository.
@@ -53,6 +61,8 @@ Just change the link.
 
 ## Contribute
 All pull request and suggestions are welcomed. Just make sure the you have tested the code.
+
+另外目前的发布界面有点丑，非常期待欢迎前端高手的参与。
 
 ## LICENSE
 [MIT](LICENSE)
