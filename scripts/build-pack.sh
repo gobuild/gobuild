@@ -5,6 +5,12 @@ set -x
 echo $TRAVIS_GO_VERSION
 test X${GR_VERSION:-$TRAVIS_GO_VERSION} != X${TRAVIS_GO_VERSION} && exit 0
 
+if test -n "$TRAVIS"
+then
+	go get github.com/mitchellh/gox
+	gox -os="linux darwin windows" -build-toolchain
+fi
+
 set -eu
 
 TARGETDIR=gorelease-temp/dist
