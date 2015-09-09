@@ -39,7 +39,7 @@ func NewRelease(qiniuDomain, os, arch, branch, name, ext string) *Release {
 }
 
 func (r *Release) makeLink() {
-	link := fmt.Sprintf("http://%s/gorelease/%s/%s/%s", r.Domain, r.Branch, r.OS+"-"+r.Arch, r.Name)
+	link := fmt.Sprintf("http://%s/gorelease/%s/%s/%s/%s", r.Domain, r.Name, r.Branch, r.OS+"-"+r.Arch, r.Name)
 	if r.Ext != "" {
 		r.Link = link + r.Ext
 		return
