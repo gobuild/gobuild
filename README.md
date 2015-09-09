@@ -39,32 +39,31 @@ Save the following content into `.travis.yml`, and put it into your repository.
 ## Step2
 You need a account in [QiniuCDN](http://www.qiniu.com)
 
-In `travis-ci.org` setting page. set three env vars (Copied from qiniu). for example
-
-`BUCKET`也就是空间地址, 没有空间的话，选择创建一个新的空间就可以了. 不妨把这3个变量找个地方存起来,以后其他项目还能用。
+In `travis-ci.org` setting page. Set three environment variables. ex: 例如
 
 	ACCESS_KEY=LKJFLSkdjfkj23lkjrl23kjflkzsjdfljwerf2w3
 	SECRET_KEY=kljdlFLSDKFJo9iwejflkjLkjsdfoijw4elfkjsd
 	BUCKET=gorelease
+
+`BUCKET`也就是空间地址, 没有空间的话，选择创建一个新的空间就可以了. 不妨把这3个变量找个地方存起来,以后其他项目还能用。不要拷贝我上面写的, 从七牛上面拷贝
 
 BTW, Qiniu CDN cache is 15mins, So you new released app will be refreshed after 15mins.
 
 ## Step3
 Get download address page.
 
-在七牛的 **空间设置/域名设置** 里面把域名拷贝出来. ex: `7xln6q.dl1.z0.glb.clouddn.com`
+在七牛的 **空间设置/域名设置** 里面把域名拷贝出来. ex: `dn-gobuild5.qbox.me`
 
-如你的项目名是 `gorelease`, 地址 <http://10.240.187.174:4000/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master> 即为下载地址页面
-
+如你的项目名是 `gorelease`, 地址 <http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master> 即为下载地址页面
 
 ## Step4
 The badge
 
-[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master)
+[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
-Just change the link.
+Just change the download link.
 
-	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master)
+	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
 ## Contribute
 All pull request and suggestions are welcomed. Just make sure the you have tested the code.
