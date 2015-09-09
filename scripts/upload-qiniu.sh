@@ -28,7 +28,7 @@ fi
 echo "Branch: $BRANCH"
 
 
-KEY_PREFIX=$(basename $PWD)/${BRANCH:?}/
+KEY_PREFIX=gorelease/$(basename $PWD)/${BRANCH:?}/
 #KEY_PREFIX=${PWD##$GOPATH/src/}/$branch/
 
 #wget -q http://devtools.qiniu.com/qiniu-devtools-${GOOS}_${GOARCH}-current.tar.gz -O- | tar -xz -C $TMPDIR
