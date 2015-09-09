@@ -2,9 +2,11 @@
 [![Build Status](https://travis-ci.org/codeskyblue/gorelease.svg?branch=master)](https://travis-ci.org/codeskyblue/gorelease)
 [![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
-gorelease - for easily public released go binary.
+For easily build go cross platform online and public go binary.
 
-这个项目是用来帮助发布go的二进制文件。
+This project is not stable for now.
+
+这个项目是用来帮助发布在线编译go，以及发布其二进制文件。
 
 这种方案是我想出来最稳定的一种方法了。完全依赖于各种开源服务,目前已经证明了这种方法是完全可行的。
 
@@ -22,17 +24,16 @@ Save the following content into `.travis.yml`, and put it into your repository.
 	env:
 	  - "PATH=/home/travis/gopath/bin:$PATH"
 	before_install:
-	  - go get github.com/mitchellh/gox
-	  - gox -os="linux darwin windows" -build-toolchain
+      - echo "pass"
 	script:
 	  - go test -v ./...
 	after_success:
-	  - gox -os="linux darwin windows" -output "gorelease-temp/dist/{{.OS}}-{{.Arch}}/{{.Dir}}"
+	  - bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeskyblue/gorelease/master/scripts/build-standalone.sh)" args0 "windows linux darwin"
       - bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeskyblue/gorelease/master/scripts/upload-qiniu.sh)"
 
 当前的编译脚本是
 
-	gox -os="linux darwin windows" -output "gorelease-temp/dist/{{.OS}}-{{.Arch}}/{{.Dir}}"
+	gox -os="${OS:-"windows linux darwin"} -output "gorelease-temp/dist/{{.OS}}-{{.Arch}}/{{.Dir}}"
 
 你也可以改成别的，文件最后都是要放到 `gorelease-temp/dist/<os>-<arch>/`下的
 
@@ -71,6 +72,7 @@ All pull request and suggestions are welcomed. Just make sure the you have teste
 另外目前的发布界面有点丑，非常期待欢迎前端高手的参与。
 
 Have a good day.
+
 ## Thanks
 * <https://travis-ci.org>
 * <http://qiniu.com>
