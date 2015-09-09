@@ -1,1 +1,1 @@
-web: gorelease
+web: gorelease -debug

@@ -13,7 +13,7 @@ This project is not stable for now.
 * 使用[travis-ci平台](https://travis-ci.org) 进行go代码的跨平台编译
 * 使用[七牛CDN](http://qiniu.com)来发布编译好的文件
 * 另外附加上我写的一些脚本[scripts](scripts). 完全编译的工作
-* 一个简单的发布界面。现在被我托管到了heroku平台,比如[这个项目自身的发布界面](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
+* 一个简单的[发布界面](http://gorelease.herokuapp.com/)。托管在heroku平台上
 
 ## Step1
 Save the following content into `.travis.yml`, and put it into your repository.
