@@ -1,5 +1,8 @@
 #!/bin/bash -
 #
+# ref travis-ci environment: http://docs.travis-ci.com/user/environment-variables/
+#
+
 GOOS=$(go env GOOS)
 GOARCH=$(go env GOARCH)
 

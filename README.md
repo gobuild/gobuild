@@ -1,5 +1,9 @@
 # gorelease
+[![Build Status](https://travis-ci.org/codeskyblue/gorelease.svg?branch=master)](https://travis-ci.org/codeskyblue/gorelease)
+[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master)
+
 experiment, gobuild5 - for easily public released go binary.
+
 
 ## Step1
 Save the following content into `.travis.yml`, and put it into your repository.
@@ -37,6 +41,18 @@ Get download address page.
 如你的项目名是 `gorelease`, 地址 <http://10.240.187.174:4000/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master> 即为下载地址页面
 
 Good luck.
+
+## Step4
+The badge
+
+[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master)
+
+Just change the link.
+
+	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master)
+
+## Contribute
+All pull request and suggestions are welcomed. Just make sure the you have tested the code.
 
 ## LICENSE
 [MIT](LICENSE)
