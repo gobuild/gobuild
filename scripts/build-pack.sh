@@ -1,6 +1,8 @@
 #!/bin/bash -
 #
 
+set -x
+echo $TRAVIS_GO_VERSION
 test X${GR_VERSION:-$TRAVIS_GO_VERSION} != X${TRAVIS_GO_VERSION} && exit 0
 
 set -eu
