@@ -22,6 +22,8 @@ else
 	ACCESS_KEY=${ACCESS_KEY:?}
 	SECRET_KEY=${SECRET_KEY:?}
 	BUCKET=${BUCKET:?}
+
+	go get github.com/codeskyblue/qsync
 fi
 echo "Branch: $BRANCH"
 
@@ -33,9 +35,6 @@ KEY_PREFIX=$(basename $PWD)/${BRANCH:?}/
 #/bin/rm -fr $HOME/.qrsync
 
 set -e
-
-go get -v github.com/codeskyblue/qsync
-
 DISTDIR=$TMPDIR/dist
 
 cat > $TMPDIR/conf.ini <<EOF
