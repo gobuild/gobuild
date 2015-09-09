@@ -8,10 +8,10 @@ gorelease - for easily public released go binary.
 
 这种方案是我想出来最稳定的一种方法了。完全依赖于各种开源服务,目前已经证明了这种方法是完全可行的。
 
-* 需要依赖 [travis-ci平台](https://travis-ci.org) 这个搞不好需要翻墙才行。
-* 依赖[七牛](http://qiniu.com) 还有我写的qiniu上传工具 <https://github.com/codeskyblue/qsync>
-* 另外附加上我写的一些脚本. 就在这个项目的[scripts](scripts)目录下
-* 一个简单的发布界面。我托管到了heroku平台,比如[这个项目自身的发布界面](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
+* 使用[travis-ci平台](https://travis-ci.org) 进行go代码的跨平台编译
+* 使用[七牛CDN](http://qiniu.com)来发布编译好的文件
+* 另外附加上我写的一些脚本[scripts](scripts). 完全编译的工作
+* 一个简单的发布界面。现在被我托管到了heroku平台,比如[这个项目自身的发布界面](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
 ## Step1
 Save the following content into `.travis.yml`, and put it into your repository.
