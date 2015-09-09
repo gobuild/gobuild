@@ -12,30 +12,21 @@
 			<tr>
 				<th>GOOS</th>
 				<th>GOARCH</th>
+				<th>Link</th>
 				<th>Op.</th>
 			</tr>
+			{{range .Releases}}
 			<tr>
-				<td>linux</td>
-				<td>amd64</td>
+				<td>{{.OS}}</td>
+				<td>{{.Arch}}</td>
+				<td>{{.Link}}</td>
 				<td>
-					<a href="http://{{.Domain}}/gorelease/{{.Branch}}/linux-amd64/{{.Name}}">Download</a>
+					<a href="{{.Link}}">Download</a>
 				</td>
 			</tr>
-			<tr>
-				<td>mac</td>
-				<td>amd64</td>
-				<td>
-					<a href="http://{{.Domain}}/gorelease/{{.Branch}}/darwin-amd64/{{.Name}}">Download</a>
-				</td>
-			</tr>
-			<tr>
-				<td>windows</td>
-				<td>386</td>
-				<td>
-					<a href="http://{{.Domain}}/gorelease/{{.Branch}}/windows-386/{{.Name}}">Download</a>
-				</td>
-			</tr>
+			{{end}}
 		</table>
 	</div>
+	{{template "analysis" .}}
 </body>
 </html>
