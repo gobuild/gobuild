@@ -1,6 +1,6 @@
 # gorelease
 [![Build Status](https://travis-ci.org/codeskyblue/gorelease.svg?branch=master)](https://travis-ci.org/codeskyblue/gorelease)
-[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master)
+[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
 gorelease - for easily public released go binary.
 
@@ -11,7 +11,7 @@ gorelease - for easily public released go binary.
 * 需要依赖 [travis-ci平台](https://travis-ci.org) 这个搞不好需要翻墙才行。
 * 依赖[七牛](http://qiniu.com) 还有我写的qiniu上传工具 <https://github.com/codeskyblue/qsync>
 * 另外附加上我写的一些脚本. 就在这个项目的[scripts](scripts)目录下
-* 一个简单的发布界面。我托管到了heroku平台,比如[这个项目自身的发布界面](http://gorelease.herokuapp.com/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master)
+* 一个简单的发布界面。我托管到了heroku平台,比如[这个项目自身的发布界面](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
 ## Step1
 Save the following content into `.travis.yml`, and put it into your repository.
@@ -30,16 +30,24 @@ Save the following content into `.travis.yml`, and put it into your repository.
 	  - gox -os="linux darwin windows" -output "gorelease-temp/dist/{{.OS}}-{{.Arch}}/{{.Dir}}"
       - bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeskyblue/gorelease/master/scripts/upload-qiniu.sh)"
 
+当前的编译脚本是
+
+	gox -os="linux darwin windows" -output "gorelease-temp/dist/{{.OS}}-{{.Arch}}/{{.Dir}}"
+
+你也可以改成别的，文件最后都是要放到 `gorelease-temp/dist/<os>-<arch>/`下的
+
 ## Step2
 You need a account in [QiniuCDN](http://www.qiniu.com)
 
 In `travis-ci.org` setting page. set three env vars (Copied from qiniu). for example
 
-`BUCKET`也就是空间地址, 没有空间的话，选择创建一个新的空间就可以了.
+`BUCKET`也就是空间地址, 没有空间的话，选择创建一个新的空间就可以了. 不妨把这3个变量找个地方存起来,以后其他项目还能用。
 
 	ACCESS_KEY=LKJFLSkdjfkj23lkjrl23kjflkzsjdfljwerf2w3
 	SECRET_KEY=kljdlFLSDKFJo9iwejflkjLkjsdfoijw4elfkjsd
 	BUCKET=gorelease
+
+BTW, Qiniu CDN cache is 15mins, So you new released app will be refreshed after 15mins.
 
 ## Step3
 Get download address page.
@@ -48,7 +56,6 @@ Get download address page.
 
 如你的项目名是 `gorelease`, 地址 <http://10.240.187.174:4000/7xln6q.dl1.z0.glb.clouddn.com/gorelease/master> 即为下载地址页面
 
-Good luck.
 
 ## Step4
 The badge
@@ -64,5 +71,12 @@ All pull request and suggestions are welcomed. Just make sure the you have teste
 
 另外目前的发布界面有点丑，非常期待欢迎前端高手的参与。
 
+Have a good day.
+## Thanks
+* <https://travis-ci.org>
+* <http://qiniu.com>
+* <https://github.com/mitchellh/gox>
+* <http://buckler.repl.ca/>
+
 ## LICENSE
-[MIT](LICENSE)
+This repository is under [MIT](LICENSE).
