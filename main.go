@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html/template"
 	"net/http"
 	"os"
 
@@ -85,8 +86,8 @@ func InitApp(debug bool) *macaron.Macaron {
 		name := ctx.Params(":name")
 		ctx.Data["Name"] = name
 		ctx.Data["Branch"] = branch
-		ctx.Data["BuildJSON"] = fmt.Sprintf(
-			"http://%s/gorelease/%s/%s/%s", domain, name, branch, "builds.json")
+		ctx.Data["BuildJSON"] = template.URL(fmt.Sprintf(
+			"http://%s/gorelease/%s/%s/%s", domain, name, branch, "builds.json"))
 		rels := make([]*Release, 0)
 		ext := r.FormValue("ext")
 

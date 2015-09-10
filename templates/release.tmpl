@@ -44,7 +44,7 @@
 	<script>
 		$(function(){
 			var $updateAt = $("#update-at");
-			$.getJSON("https://dn-gobuild5.qbox.me/gorelease/gosuv/builds.json")
+			$.getJSON("{{.BuildJSON}}")
 				.success(function(res){
 					var upTime = moment.unix(res.update_time);
 					var fromNow = upTime.fromNow();
