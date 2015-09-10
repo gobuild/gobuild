@@ -26,7 +26,7 @@ else
 	SECRET_KEY=${SECRET_KEY:?}
 	BUCKET=${BUCKET:?}
 
-	go get github.com/codeskyblue/qsync
+	go get github.com/gorelease/qsync
 fi
 echo "Branch: $BRANCH"
 
