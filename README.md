@@ -26,9 +26,7 @@ Save the following content into `.travis.yml`, and put it into your repository.
 	script:
 	  - go test -v ./...
 	after_success:
-	  - echo bash -c "$(curl -fsSL http://bitly.com/gorelease) gorelease
-	  - https://raw.githubusercontent.com/codeskyblue/gorelease/master/scripts/build-standalone.sh)" args0 "windows linux darwin"
-      - bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeskyblue/gorelease/master/scripts/upload-qiniu.sh)"
+	  - bash -c "$(curl -fsSL http://bitly.com/gorelease) gorelease
 
 当前的编译脚本是
 
