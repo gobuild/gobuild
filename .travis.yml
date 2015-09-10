@@ -2,10 +2,10 @@ language: go
 go:
   - 1.4
 env:
-  - "PATH=/home/travis/gopath/bin:$PATH"
+  - PATH=$GOPATH/bin:$PATH
 before_install:
   - echo "pass"
 script:
   - go test -v ./...
 after_success:
-  - bash -c "$(curl -fsSL http://bitly.com/gorelease) gorelease
+  - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease
