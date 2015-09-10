@@ -37,7 +37,7 @@ KEY_PREFIX=gorelease/$(basename $PWD)/${BRANCH:?}/
 #wget -q http://devtools.qiniu.com/qiniu-devtools-${GOOS}_${GOARCH}-current.tar.gz -O- | tar -xz -C $TMPDIR
 #/bin/rm -fr $HOME/.qrsync
 
-set -e
+set -eu
 DISTDIR=$TMPDIR/dist
 
 cat > $TMPDIR/conf.ini <<EOF
@@ -52,5 +52,12 @@ keyprefix = $KEY_PREFIX
 syncdir = $DISTDIR
 EOF
 
+cat > $DISTDIR/builds.json <<EOF
+{
+	"update_time": $(date +%s),
+	"go_version": "$TRAVIS_GO_VERSION"
+}
+EOF
 # upload
 qsync -c $TMPDIR/conf.ini
+

@@ -3,11 +3,20 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="/common.css">
+	<script src="/jquery.min.js"></script>
 	<title>gorelease - {{.Name}}</title>
 </head>
 <body>
 	<div id="page">
 		<h1>{{.Name}} <small>{{.Branch}}</small></h1>
+		<div class="build-info">
+			<p>
+				<strong>Go</strong> <span id="goversion">unknown</span>
+			</p>
+			<p>
+				<strong>Updated</strong> <span id="update-at">unknown</span>
+			</p>
+		</div>
 		<table>
 			<tr>
 				<th>GOOS</th>
@@ -31,6 +40,23 @@
 			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>
 		</div>
 	</div>
+	<script src="/components/moment/moment.js"></script>
+	<script>
+		$(function(){
+			var $updateAt = $("#update-at");
+			$.getJSON("https://dn-gobuild5.qbox.me/gorelease/gosuv/builds.json")
+				.success(function(res){
+					var upTime = moment.unix(res.update_time);
+					var fromNow = upTime.fromNow();
+					$updateAt.text(fromNow);
+
+					$("#goversion").text(res.go_version);
+				})
+				.error(function(res){
+					$("div.build-info").hide();
+				});
+		});
+	</script>
 	{{template "analysis" .}}
 </body>
 </html>
