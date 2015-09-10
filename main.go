@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/Unknwon/macaron"
-	"github.com/codeskyblue/gorelease/public"
-	"github.com/codeskyblue/gorelease/templates"
+	"github.com/gorelease/gorelease/public"
+	"github.com/gorelease/gorelease/templates"
 	"github.com/macaron-contrib/bindata"
 )
 
