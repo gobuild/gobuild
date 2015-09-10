@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/codeskyblue/gorelease",
+	"ImportPath": "github.com/gorelease/gorelease",
 	"GoVersion": "go1.4.2",
 	"Deps": [
 		{
