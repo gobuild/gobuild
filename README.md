@@ -1,5 +1,5 @@
 # gorelease
-[![Build Status](https://travis-ci.org/codeskyblue/gorelease.svg?branch=master)](https://travis-ci.org/codeskyblue/gorelease)
+[![Build Status](https://travis-ci.org/gorelease/gorelease.svg?branch=master)](https://travis-ci.org/gorelease/gorelease)
 [![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
 For easily build go cross platform online and public go binary.
