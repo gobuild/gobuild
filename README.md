@@ -21,18 +21,12 @@ Save the following content into `.travis.yml`, and put it into your repository.
 	language: go
 	go:
 	  - 1.4
-	env:
-	  - "PATH=/home/travis/gopath/bin:$PATH"
 	script:
 	  - go test -v ./...
 	after_success:
-	  - bash -c "$(curl -fsSL http://bitly.com/gorelease) gorelease
+	  - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease
 
-当前的编译脚本是
-
-	gox -os="${OS:-"windows linux darwin"} -output "gorelease-temp/dist/{{.OS}}-{{.Arch}}/{{.Dir}}"
-
-你也可以改成别的，文件最后都是要放到 `gorelease-temp/dist/<os>-<arch>/`下的
+This script performs build and publish to qiniu.
 
 ## Step2
 You need a account in [QiniuCDN](http://www.qiniu.com)
