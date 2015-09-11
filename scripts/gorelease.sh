@@ -2,12 +2,16 @@
 #
 # gorelease.sh: build and publish
 #
-# shorted url: http://bitly.com/gorelease
+# shorted url: <http://bitly.com/gorelease>
 # need login to view stats: https://bitly.com/a/stats
+#
+# ref:
+# - [travis-ci environment](http://docs.travis-ci.com/user/environment-variables/)
 
 set -e
 set -o pipefail
 
+echo "Is Pull Request: $TRAVIS_PULL_REQUEST"
 # Set environment variables
 GORELEASE_GO_VERSION="1.4"
 BUILD_OS=${1:-"windows linux darwin"}

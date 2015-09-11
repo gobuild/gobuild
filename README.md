@@ -1,6 +1,6 @@
 # gorelease
-[![Build Status](https://travis-ci.org/codeskyblue/gorelease.svg?branch=master)](https://travis-ci.org/codeskyblue/gorelease)
-[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
+[![Build Status](https://travis-ci.org/gorelease/gorelease.svg?branch=master)](https://travis-ci.org/gorelease/gorelease)
+[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
 For easily build go cross platform online and public go binary.
 
@@ -12,7 +12,7 @@ This project is not stable for now.
 
 * 使用[travis-ci平台](https://travis-ci.org) 进行go代码的跨平台编译
 * 使用[七牛CDN](http://qiniu.com)来发布编译好的文件
-* 另外附加上我写的一些脚本[scripts](scripts). 完全编译的工作
+* 另外附加上我写的一些脚本[scripts](scripts). 完成编译的工作
 * 一个简单的[发布界面](http://gorelease.herokuapp.com/)。托管在heroku平台上
 
 ## Step1
@@ -51,11 +51,11 @@ Get download address page.
 ## Step4
 The badge
 
-[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
+[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
 Just change the download link.
 
-	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-brightgreen.png)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
+	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
 ## Contribute
 All pull request and suggestions are welcomed. Just make sure the you have tested the code.
@@ -67,8 +67,8 @@ Have a good day.
 ## Thanks
 * <https://travis-ci.org>
 * <http://qiniu.com>
+* <http://shields.io>
 * <https://github.com/mitchellh/gox>
-* <http://buckler.repl.ca/>
 
 ## LICENSE
 This repository is under [MIT](LICENSE).

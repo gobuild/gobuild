@@ -84,7 +84,7 @@ func commonCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "common.css", size: 500, mode: os.FileMode(420), modTime: time.Unix(1441714924, 0)}
+	info := bindataFileInfo{name: "common.css", size: 500, mode: os.FileMode(420), modTime: time.Unix(1441899413, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -104,7 +104,7 @@ func jqueryMinJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "jquery.min.js", size: 84349, mode: os.FileMode(384), modTime: time.Unix(1441191935, 0)}
+	info := bindataFileInfo{name: "jquery.min.js", size: 84349, mode: os.FileMode(420), modTime: time.Unix(1441899413, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
