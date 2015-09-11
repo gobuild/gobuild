@@ -37,7 +37,8 @@ KEY_PREFIX=gorelease/$(basename $PWD)/${BRANCH:?}/
 echo "Branch: $BRANCH"
 echo "KeyPrefix: $KEY_PREFIX"
 
-if test -n "$TRAVIS" -a X$TRAVIS_GO_VERSION != "$GORELEASE_GO_VERSION"; then
+if test -n "$TRAVIS" -a "X$TRAVIS_GO_VERSION" != "X$GORELEASE_GO_VERSION"; then
+	echo "Expect go$GORELEASE_GO_VERSION, but travis got go$TRAVIS_GO_VERSION"
 	exit 0
 fi
 

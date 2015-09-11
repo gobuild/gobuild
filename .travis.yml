@@ -3,5 +3,4 @@ go:
   - 1.4
 script:
   - go test -v ./...
-after_success:
   - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease
