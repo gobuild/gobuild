@@ -44,7 +44,7 @@
 	<script>
 		$(function(){
 			var $updateAt = $("#update-at");
-			$.getJSON("{{.BuildJSON}}")
+			$.getJSON(location.protocol+"{{.BuildJSON}}")
 				.success(function(res){
 					var upTime = moment.unix(res.update_time);
 					var fromNow = upTime.fromNow();

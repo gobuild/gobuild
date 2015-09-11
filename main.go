@@ -78,6 +78,7 @@ func InitApp(debug bool) *macaron.Macaron {
 	}
 
 	app.Get("/", func(ctx *macaron.Context) {
+		ctx.Data["Host"] = ctx.Req.Host
 		ctx.HTML(200, "homepage")
 	})
 	app.Get("/:domain/:name/:branch", func(ctx *macaron.Context, r *http.Request) {
@@ -87,7 +88,7 @@ func InitApp(debug bool) *macaron.Macaron {
 		ctx.Data["Name"] = name
 		ctx.Data["Branch"] = branch
 		ctx.Data["BuildJSON"] = template.URL(fmt.Sprintf(
-			"http://%s/gorelease/%s/%s/%s", domain, name, branch, "builds.json"))
+			"//%s/gorelease/%s/%s/%s", domain, name, branch, "builds.json"))
 		rels := make([]*Release, 0)
 		ext := r.FormValue("ext")
 
