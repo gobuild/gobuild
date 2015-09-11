@@ -55,7 +55,7 @@ EOF
 cat > $DISTDIR/builds.json <<EOF
 {
 	"update_time": $(date +%s),
-	"go_version": "$TRAVIS_GO_VERSION"
+	"go_version": "$GORELEASE_GO_VERSION"
 }
 EOF
 # upload
