@@ -19,9 +19,18 @@
 			"Rev": "8034104f1486732c68b88433eaac22a20ee9040a"
 		},
 		{
+			"ImportPath": "gopkg.in/bsm/ratelimit.v1",
+			"Rev": "bda20d5067a03094fc6762f7ead53027afac5f28"
+		},
+		{
 			"ImportPath": "gopkg.in/ini.v1",
 			"Comment": "v0-33-g4633071",
 			"Rev": "463307112d3b6430c54c3dad77b4d0fa745b859c"
+		},
+		{
+			"ImportPath": "gopkg.in/redis.v3",
+			"Comment": "v3.2.10",
+			"Rev": "eef3fd78ef0f78e8406339c27fd46c6af93f24ba"
 		}
 	]
 }
