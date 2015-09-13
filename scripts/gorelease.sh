@@ -65,7 +65,6 @@ gox -os "$BUILD_OS" -output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}"
 #wget -q http://devtools.qiniu.com/qiniu-devtools-${GOOS}_${GOARCH}-current.tar.gz -O- | tar -xz -C $TMPDIR
 #/bin/rm -fr $HOME/.qrsync
 
-set -eu
 
 cat > $TMPDIR/conf.ini <<EOF
 [qiniu]
@@ -77,7 +76,13 @@ keyprefix = $KEY_PREFIX
 
 [local]
 syncdir = $DISTDIR
+
+[gorelease]
+token = "$GORELEASE_TOKEN"
+bucket = "gobuild5"
 EOF
+
+set -eu
 
 cat > $DISTDIR/builds.json <<EOF
 {

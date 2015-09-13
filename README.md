@@ -31,11 +31,17 @@ This script performs build and publish to qiniu.
 ## Step2
 You need a account in [QiniuCDN](http://www.qiniu.com)
 
+**Do not make environment vars public in travis**
+
 In `travis-ci.org` setting page. Set three environment variables. ex: 例如
 
 	ACCESS_KEY=LKJFLSkdjfkj23lkjrl23kjflkzsjdfljwerf2w3
 	SECRET_KEY=kljdlFLSDKFJo9iwejflkjLkjsdfoijw4elfkjsd
 	BUCKET=gorelease
+
+Or Only need to set GORELEASE\_TOKEN, which need to get from <http://gorelease.herokuapp.com>. Not avaliable now. ex:
+
+	GORELEASE_TOKEN=safq2lkfjasldkfjasdlflkajsdfasdfa
 
 `BUCKET`也就是空间地址, 没有空间的话，选择创建一个新的空间就可以了. 不妨把这3个变量找个地方存起来,以后其他项目还能用。不要拷贝我上面写的, 从七牛上面拷贝
 
