@@ -79,7 +79,7 @@ syncdir = $DISTDIR
 
 [gorelease]
 token = "$GORELEASE_TOKEN"
-bucket = "gobuild5"
+host = "qntoken.herokuapp.com"
 EOF
 
 set -eu
