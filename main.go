@@ -81,6 +81,31 @@ func InitApp(debug bool) *macaron.Macaron {
 		ctx.Data["Host"] = ctx.Req.Host
 		ctx.HTML(200, "homepage")
 	})
+
+	app.Get("/:owner/:name", func(ctx *macaron.Context, r *http.Request) {
+		//owner := ctx.Params(":owner")
+		name := ctx.Params(":name")
+		domain := "dn-gobuild5.qbox.me"
+		branch := "master"
+
+		ctx.Data["Name"] = name
+		ctx.Data["Branch"] = branch
+		ctx.Data["BuildJSON"] = template.URL(fmt.Sprintf(
+			"//%s/gorelease/%s/%s/%s", domain, name, branch, "builds.json"))
+		rels := make([]*Release, 0)
+		ext := r.FormValue("ext")
+
+		rels = append(rels, NewRelease(domain, "linux", "amd64", branch, name, ext))
+		rels = append(rels, NewRelease(domain, "linux", "386", branch, name, ext))
+		rels = append(rels, NewRelease(domain, "darwin", "amd64", branch, name, ext))
+		rels = append(rels, NewRelease(domain, "darwin", "386", branch, name, ext))
+		rels = append(rels, NewRelease(domain, "windows", "amd64", branch, name, ext))
+		rels = append(rels, NewRelease(domain, "windows", "386", branch, name, ext))
+		ctx.Data["Releases"] = rels
+		ctx.HTML(200, "release")
+
+	})
+
 	app.Get("/:domain/:name/:branch", func(ctx *macaron.Context, r *http.Request) {
 		domain := ctx.Params(":domain")
 		branch := ctx.Params(":branch")
