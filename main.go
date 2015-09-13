@@ -4,16 +4,32 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/Unknwon/macaron"
 	"github.com/gorelease/gorelease/public"
 	"github.com/gorelease/gorelease/templates"
 	"github.com/macaron-contrib/bindata"
+	"gopkg.in/redis.v3"
 )
 
 var debug = flag.Bool("debug", false, "enable debug mode")
+var rdx *redis.Client
+
+func init() {
+	redisAddr := os.Getenv("REDIS_ADDR")
+	if redisAddr == "" {
+		redisAddr = "localhost:6379"
+	}
+	rdx = redis.NewClient(&redis.Options{
+		Addr:     redisAddr,
+		Password: os.Getenv("REDIS_PASSWORD"),
+		DB:       0,
+	})
+}
 
 type Release struct {
 	Domain string
@@ -26,7 +42,7 @@ type Release struct {
 }
 
 //http://{{.Domain}}/gorelease/{{.Branch}}/windows-amd64/{{.Name}}.exe
-func NewRelease(qiniuDomain, os, arch, branch, name, ext string) *Release {
+func NewRelease(qiniuDomain, os, arch, branch, name, ext string, redirect bool) *Release {
 	r := &Release{
 		Domain: qiniuDomain,
 		OS:     os,
@@ -35,20 +51,36 @@ func NewRelease(qiniuDomain, os, arch, branch, name, ext string) *Release {
 		Name:   name,
 		Ext:    ext,
 	}
-	r.makeLink()
+	r.makeLink(redirect)
 	return r
 }
 
-func (r *Release) makeLink() {
-	link := fmt.Sprintf("http://%s/gorelease/%s/%s/%s/%s", r.Domain, r.Name, r.Branch, r.OS+"-"+r.Arch, r.Name)
+func (r *Release) makeLink(redirect bool) {
+	var link string
+	link = fmt.Sprintf("http://%s/gorelease/%s/%s/%s/%s", r.Domain, r.Name, r.Branch, r.OS+"-"+r.Arch, r.Name)
+	if redirect {
+		link = StrFormat("{name}/downloads/{os}/{arch}", map[string]interface{}{
+			"name": r.Name,
+			"os":   r.OS,
+			"arch": r.Arch,
+		})
+	}
 	if r.Ext != "" {
 		r.Link = link + r.Ext
 		return
 	}
-	if r.OS == "windows" {
+	if r.OS == "windows" && !redirect {
 		link += ".exe"
 	}
 	r.Link = link
+}
+
+func StrFormat(format string, kv map[string]interface{}) string {
+	for key, val := range kv {
+		key = "{" + key + "}"
+		format = strings.Replace(format, key, fmt.Sprintf("%v", val), -1)
+	}
+	return format
 }
 
 func InitApp(debug bool) *macaron.Macaron {
@@ -82,11 +114,54 @@ func InitApp(debug bool) *macaron.Macaron {
 		ctx.HTML(200, "homepage")
 	})
 
-	app.Get("/:owner/:name", func(ctx *macaron.Context, r *http.Request) {
-		//owner := ctx.Params(":owner")
+	app.Get("/:owner/:name/downloads/:os/:arch", func(ctx *macaron.Context, r *http.Request) {
+		owner := ctx.Params(":owner")
 		name := ctx.Params(":name")
-		domain := "dn-gobuild5.qbox.me"
+		branch := r.FormValue("branch")
+		if branch == "" {
+			branch = "master"
+		}
+		repo := owner + "/" + name
+		domain := rdx.Get(repo + ":domain").Val()
+		if domain == "" {
+			ctx.Error(405, "repo not registed in gorelease, not open register for now")
+			return
+		}
+		osarch := ctx.Params(":os") + "-" + ctx.Params(":arch")
+		rdx.Incr(repo + ":dlcnt")
+		rdx.Incr(repo + ":dlcnt:" + osarch)
+		realURL := StrFormat("http://{domain}/gorelease/{name}/{branch}/{osarch}/{name}",
+			map[string]interface{}{
+				"domain": domain,
+				"name":   name,
+				"branch": branch,
+				"osarch": osarch,
+			})
+		if ctx.Params(":os") == "windows" {
+			realURL += ".exe"
+		}
+		ctx.Redirect(realURL, 302)
+	})
+
+	app.Get("/:owner/:name", func(ctx *macaron.Context, r *http.Request) {
+		owner := ctx.Params(":owner")
+		name := ctx.Params(":name")
+		//domain := "dn-gobuild5.qbox.me"
 		branch := "master"
+
+		// Here need redis connection
+		repo := owner + "/" + name
+		domain := rdx.Get(repo + ":domain").Val()
+		if domain == "" {
+			ctx.Error(405, "repo not registed in gorelease, not open register for now")
+			return
+		}
+		log.Println("Domain:", domain)
+		rdx.Incr(repo + ":pageview")
+		pv, _ := rdx.Get(repo + ":pageview").Int64()
+
+		ctx.Data["PageView"] = pv
+		ctx.Data["DlCount"], _ = rdx.Get(repo + ":dlcnt").Int64()
 
 		ctx.Data["Name"] = name
 		ctx.Data["Branch"] = branch
@@ -95,12 +170,12 @@ func InitApp(debug bool) *macaron.Macaron {
 		rels := make([]*Release, 0)
 		ext := r.FormValue("ext")
 
-		rels = append(rels, NewRelease(domain, "linux", "amd64", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "linux", "386", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "darwin", "amd64", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "darwin", "386", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "windows", "amd64", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "windows", "386", branch, name, ext))
+		rels = append(rels, NewRelease(domain, "linux", "amd64", branch, name, ext, true))
+		rels = append(rels, NewRelease(domain, "linux", "386", branch, name, ext, true))
+		rels = append(rels, NewRelease(domain, "darwin", "amd64", branch, name, ext, true))
+		rels = append(rels, NewRelease(domain, "darwin", "386", branch, name, ext, true))
+		rels = append(rels, NewRelease(domain, "windows", "amd64", branch, name, ext, true))
+		rels = append(rels, NewRelease(domain, "windows", "386", branch, name, ext, true))
 		ctx.Data["Releases"] = rels
 		ctx.HTML(200, "release")
 
@@ -117,12 +192,12 @@ func InitApp(debug bool) *macaron.Macaron {
 		rels := make([]*Release, 0)
 		ext := r.FormValue("ext")
 
-		rels = append(rels, NewRelease(domain, "linux", "amd64", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "linux", "386", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "darwin", "amd64", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "darwin", "386", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "windows", "amd64", branch, name, ext))
-		rels = append(rels, NewRelease(domain, "windows", "386", branch, name, ext))
+		rels = append(rels, NewRelease(domain, "linux", "amd64", branch, name, ext, false))
+		rels = append(rels, NewRelease(domain, "linux", "386", branch, name, ext, false))
+		rels = append(rels, NewRelease(domain, "darwin", "amd64", branch, name, ext, false))
+		rels = append(rels, NewRelease(domain, "darwin", "386", branch, name, ext, false))
+		rels = append(rels, NewRelease(domain, "windows", "amd64", branch, name, ext, false))
+		rels = append(rels, NewRelease(domain, "windows", "386", branch, name, ext, false))
 		ctx.Data["Releases"] = rels
 		ctx.HTML(200, "release")
 	})
@@ -131,6 +206,9 @@ func InitApp(debug bool) *macaron.Macaron {
 
 func main() {
 	flag.Parse()
+	if err := rdx.Ping().Err(); err != nil {
+		log.Fatal(err)
+	}
 	app := InitApp(*debug)
 
 	port := 4000

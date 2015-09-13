@@ -57,6 +57,17 @@ Just change the download link.
 
 	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
+## How to run this project
+To run this project you need a redis-server. Addr and Password are read from ENV
+
+	REDIS_ADDR=localhost:6379
+	REDIS_PASSWORD=""
+
+Use redis db:0
+
+	$ go build
+	$ ./gorelease -debug	
+
 ## Contribute
 All pull request and suggestions are welcomed. Just make sure the you have tested the code.
 

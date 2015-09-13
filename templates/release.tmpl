@@ -9,6 +9,10 @@
 <body>
 	<div id="page">
 		<h1>{{.Name}} <small>{{.Branch}}</small></h1>
+		<div>
+			<p>PageView: {{.PageView}}</p>
+			<p>Download: {{.DlCount}}</p>
+		</div>
 		<div class="build-info">
 			<p>
 				<strong>Go</strong> <span id="goversion">unknown</span>
@@ -28,7 +32,6 @@
 			<tr>
 				<td>{{.OS}}</td>
 				<td>{{.Arch}}</td>
-				<td>{{.Link}}</td>
 				<td>
 					<a href="{{.Link}}">Download</a>
 				</td>
