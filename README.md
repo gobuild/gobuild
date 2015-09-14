@@ -2,21 +2,22 @@
 [![Build Status](https://travis-ci.org/gorelease/gorelease.svg?branch=master)](https://travis-ci.org/gorelease/gorelease)
 [![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
-For easily build go cross platform online and public go binary.
+For easily build go cross platform online and share your binary.
 
+With this project help you will have a download page. ex: <http://gorelease.herokuapp.com/gorelease/gorelease>
+
+## Not stable
 This project is not stable for now.
 
-这个项目是用来帮助发布在线编译go，以及发布其二进制文件。
+## How to use gorelease
+It is very simple to use gorelease. Before doing everything, make sure this repo have integrate with <https://travis-ci.org>
 
-这种方案是我想出来最稳定的一种方法了。完全依赖于各种开源服务,目前已经证明了这种方法是完全可行的。
+Just add two lines to your `travis.yml`.
 
-* 使用[travis-ci平台](https://travis-ci.org) 进行go代码的跨平台编译
-* 使用[七牛CDN](http://qiniu.com)来发布编译好的文件
-* 另外附加上我写的一些脚本[scripts](scripts). 完成编译的工作
-* 一个简单的[发布界面](http://gorelease.herokuapp.com/)。托管在heroku平台上
+	after_success:
+	  - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease
 
-## Step1
-Save the following content into `.travis.yml`, and put it into your repository.
+The simplest `travis.yml` is like
 
 	language: go
 	go:
@@ -26,48 +27,42 @@ Save the following content into `.travis.yml`, and put it into your repository.
 	after_success:
 	  - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease
 
-This script performs build and publish to qiniu.
+Go to this link <http://gorelease.herokuapp.com/token> to get your personal token.
 
-## Step2
-You need a account in [QiniuCDN](http://www.qiniu.com)
+Add the token to travis env setting page.
 
-**Do not make environment vars public in travis**
+	GORELEASE_TOKEN=grlkalsjdfads....
 
-In `travis-ci.org` setting page. Set three environment variables. ex: 例如
+After doing all the things. Every time you push to the github, the new builed binaries will get from <http://gorelease.herokuapp.com>
 
-	ACCESS_KEY=LKJFLSkdjfkj23lkjrl23kjflkzsjdfljwerf2w3
-	SECRET_KEY=kljdlFLSDKFJo9iwejflkjLkjsdfoijw4elfkjsd
-	BUCKET=gorelease
+If you repo in **github.com/gorelease/gorelease**, the download page is <http://gorelease.herokuapp.com/gorelease/gorelease>
 
-Or Only need to set GORELEASE\_TOKEN, which need to get from <http://gorelease.herokuapp.com>. Not avaliable now. ex:
+# 其他说明
+这个项目是用来帮助发布在线编译go，以及发布其二进制文件。
 
-	GORELEASE_TOKEN=safq2lkfjasldkfjasdlflkajsdfasdfa
+这种方案是我想出来最稳定的一种方法了。完全依赖于各种开源服务,目前已经证明了这种方法是完全可行的。
 
-`BUCKET`也就是空间地址, 没有空间的话，选择创建一个新的空间就可以了. 不妨把这3个变量找个地方存起来,以后其他项目还能用。不要拷贝我上面写的, 从七牛上面拷贝
+* 使用[travis-ci平台](https://travis-ci.org) 进行go代码的跨平台编译
+* 使用[七牛CDN](http://qiniu.com)来发布编译好的文件
+* 另外附加上我写的一些脚本[scripts](scripts). 完成编译的工作
+* 一个简单的[发布界面](http://gorelease.herokuapp.com/)。托管在heroku平台上
 
 BTW, Qiniu CDN cache is 15mins, So you new released app will be refreshed after 15mins.
 
-## Step3
-Get download address page.
-
-在七牛的 **空间设置/域名设置** 里面把域名拷贝出来. ex: `dn-gobuild5.qbox.me`
-
-如你的项目名是 `gorelease`, 地址 <http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master> 即为下载地址页面
-
-## Step4
-The badge
-
+## Badge
 [![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
 
 Just change the download link.
 
-	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
+	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/your-repo-download-page)
 
 ## How to run this project
 To run this project you need a redis-server. Addr and Password are read from ENV
 
 	REDIS_ADDR=localhost:6379
 	REDIS_PASSWORD=""
+	GITHUB_CLIENT_ID=12...
+	GITHUB_CLIENT_SECRET=l213.....
 
 Use redis db:0
 
@@ -86,6 +81,7 @@ Have a good day.
 * <http://qiniu.com>
 * <http://shields.io>
 * <https://github.com/mitchellh/gox>
+* <https://www.redislabs.com>
 
 ## LICENSE
 This repository is under [MIT](LICENSE).
