@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/Unknwon/macaron"
 	"github.com/gorelease/gorelease/github"
@@ -79,12 +78,26 @@ func (r *Release) makeLink(redirect bool) {
 	r.Link = link
 }
 
-func StrFormat(format string, kv map[string]interface{}) string {
-	for key, val := range kv {
-		key = "{" + key + "}"
-		format = strings.Replace(format, key, fmt.Sprintf("%v", val), -1)
-	}
-	return format
+func useBindata(app *macaron.Macaron) {
+	app.Use(macaron.Static("public",
+		macaron.StaticOptions{
+			FileSystem: bindata.Static(bindata.Options{
+				Asset:      public.Asset,
+				AssetDir:   public.AssetDir,
+				AssetNames: public.AssetNames,
+				Prefix:     "",
+			}),
+		},
+	))
+
+	app.Use(macaron.Renderer(macaron.RenderOptions{
+		TemplateFileSystem: bindata.Templates(bindata.Options{
+			Asset:      templates.Asset,
+			AssetDir:   templates.AssetDir,
+			AssetNames: templates.AssetNames,
+			Prefix:     "",
+		}),
+	}))
 }
 
 func InitApp(debug bool) *macaron.Macaron {
@@ -98,28 +111,11 @@ func InitApp(debug bool) *macaron.Macaron {
 			RedirectURL:  "",
 		},
 	))
+
 	if debug {
 		app.Use(macaron.Renderer())
 	} else {
-		app.Use(macaron.Static("public",
-			macaron.StaticOptions{
-				FileSystem: bindata.Static(bindata.Options{
-					Asset:      public.Asset,
-					AssetDir:   public.AssetDir,
-					AssetNames: public.AssetNames,
-					Prefix:     "",
-				}),
-			},
-		))
-
-		app.Use(macaron.Renderer(macaron.RenderOptions{
-			TemplateFileSystem: bindata.Templates(bindata.Options{
-				Asset:      templates.Asset,
-				AssetDir:   templates.AssetDir,
-				AssetNames: templates.AssetNames,
-				Prefix:     "",
-			}),
-		}))
+		useBindata(app)
 	}
 
 	app.Get("/token", oauth2.LoginRequired, func(tokens oauth2.Tokens, ctx *macaron.Context) {
