@@ -9,7 +9,8 @@ import (
 	"os"
 
 	"github.com/Unknwon/macaron"
-	"github.com/gorelease/gorelease/github"
+	"github.com/gorelease/gorelease/models"
+	"github.com/gorelease/gorelease/models/goutils"
 	"github.com/gorelease/gorelease/public"
 	"github.com/gorelease/gorelease/routers"
 	"github.com/gorelease/gorelease/templates"
@@ -24,15 +25,7 @@ var debug = flag.Bool("debug", false, "enable debug mode")
 var rdx *redis.Client
 
 func init() {
-	redisAddr := os.Getenv("REDIS_ADDR")
-	if redisAddr == "" {
-		redisAddr = "localhost:6379"
-	}
-	rdx = redis.NewClient(&redis.Options{
-		Addr:     redisAddr,
-		Password: os.Getenv("REDIS_PASSWORD"),
-		DB:       0,
-	})
+	rdx = models.GetRedisClient()
 }
 
 type Release struct {
@@ -63,7 +56,7 @@ func (r *Release) makeLink(redirect bool) {
 	var link string
 	link = fmt.Sprintf("http://%s/gorelease/%s/%s/%s/%s", r.Domain, r.Name, r.Branch, r.OS+"-"+r.Arch, r.Name)
 	if redirect {
-		link = StrFormat("{name}/downloads/{os}/{arch}", map[string]interface{}{
+		link = goutils.StrFormat("{name}/downloads/{os}/{arch}", map[string]interface{}{
 			"name": r.Name,
 			"os":   r.OS,
 			"arch": r.Arch,
@@ -119,60 +112,13 @@ func InitApp(debug bool) *macaron.Macaron {
 		useBindata(app)
 	}
 
-	app.Get("/token", oauth2.LoginRequired, func(tokens oauth2.Tokens, ctx *macaron.Context) {
-		gh := github.New(tokens)
-		user, err := gh.User()
-		if err != nil {
-			ctx.Error(500, err.Error())
-			return
-		}
-		rdx.Set("user:"+user.Login+":github_token", tokens.Access(), 0)
-		tokenKey := "user:" + user.Login + ":token"
-		if !rdx.Exists(tokenKey).Val() {
-			rdx.Set(tokenKey, "gr"+RandNString(40), 0)
-		}
-		token := rdx.Get(tokenKey).Val()
-		rdx.SAdd("token:"+token+":keys", user.Login)
-		ctx.Data["User"] = user
-		ctx.Data["Token"] = token
-		ctx.HTML(200, "token")
-	})
-
 	app.Get("/", routers.Homepage)
-
-	app.Get("/:owner/:name/downloads/:os/:arch", func(ctx *macaron.Context, r *http.Request) {
-		owner := ctx.Params(":owner")
-		name := ctx.Params(":name")
-		branch := r.FormValue("branch")
-		if branch == "" {
-			branch = "master"
-		}
-		repo := owner + "/" + name
-		domain := rdx.Get("domain:" + repo).Val()
-		if domain == "" {
-			ctx.Error(405, "repo not registed in gorelease, not open register for now")
-			return
-		}
-		osarch := ctx.Params(":os") + "-" + ctx.Params(":arch")
-		rdx.Incr("downloads:" + repo)
-		rdx.Incr("downloads:" + repo + ":" + osarch)
-		realURL := StrFormat("http://{domain}/gorelease/{name}/{branch}/{osarch}/{name}",
-			map[string]interface{}{
-				"domain": domain,
-				"name":   name,
-				"branch": branch,
-				"osarch": osarch,
-			})
-		if ctx.Params(":os") == "windows" {
-			realURL += ".exe"
-		}
-		ctx.Redirect(realURL, 302)
-	})
+	app.Get("/token", oauth2.LoginRequired, routers.Token)
+	app.Get("/:owner/:name/downloads/:os/:arch", routers.DownloadRedirect)
 
 	app.Get("/:owner/:name", func(ctx *macaron.Context, r *http.Request) {
 		owner := ctx.Params(":owner")
 		name := ctx.Params(":name")
-		//domain := "dn-gobuild5.qbox.me"
 		branch := "master"
 
 		// Here need redis connection
@@ -202,28 +148,6 @@ func InitApp(debug bool) *macaron.Macaron {
 		rels = append(rels, NewRelease(domain, "darwin", "386", branch, name, ext, true))
 		rels = append(rels, NewRelease(domain, "windows", "amd64", branch, name, ext, true))
 		rels = append(rels, NewRelease(domain, "windows", "386", branch, name, ext, true))
-		ctx.Data["Releases"] = rels
-		ctx.HTML(200, "release")
-
-	})
-
-	app.Get("/:domain/:name/:branch", func(ctx *macaron.Context, r *http.Request) {
-		domain := ctx.Params(":domain")
-		branch := ctx.Params(":branch")
-		name := ctx.Params(":name")
-		ctx.Data["Name"] = name
-		ctx.Data["Branch"] = branch
-		ctx.Data["BuildJSON"] = template.URL(fmt.Sprintf(
-			"//%s/gorelease/%s/%s/%s", domain, name, branch, "builds.json"))
-		rels := make([]*Release, 0)
-		ext := r.FormValue("ext")
-
-		rels = append(rels, NewRelease(domain, "linux", "amd64", branch, name, ext, false))
-		rels = append(rels, NewRelease(domain, "linux", "386", branch, name, ext, false))
-		rels = append(rels, NewRelease(domain, "darwin", "amd64", branch, name, ext, false))
-		rels = append(rels, NewRelease(domain, "darwin", "386", branch, name, ext, false))
-		rels = append(rels, NewRelease(domain, "windows", "amd64", branch, name, ext, false))
-		rels = append(rels, NewRelease(domain, "windows", "386", branch, name, ext, false))
 		ctx.Data["Releases"] = rels
 		ctx.HTML(200, "release")
 	})
