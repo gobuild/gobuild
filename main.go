@@ -11,6 +11,7 @@ import (
 	"github.com/Unknwon/macaron"
 	"github.com/gorelease/gorelease/github"
 	"github.com/gorelease/gorelease/public"
+	"github.com/gorelease/gorelease/routers"
 	"github.com/gorelease/gorelease/templates"
 	"github.com/gorelease/oauth2"
 	"github.com/macaron-contrib/bindata"
@@ -137,10 +138,7 @@ func InitApp(debug bool) *macaron.Macaron {
 		ctx.HTML(200, "token")
 	})
 
-	app.Get("/", func(ctx *macaron.Context) {
-		ctx.Data["Host"] = ctx.Req.Host
-		ctx.HTML(200, "homepage")
-	})
+	app.Get("/", routers.Homepage)
 
 	app.Get("/:owner/:name/downloads/:os/:arch", func(ctx *macaron.Context, r *http.Request) {
 		owner := ctx.Params(":owner")
@@ -150,14 +148,14 @@ func InitApp(debug bool) *macaron.Macaron {
 			branch = "master"
 		}
 		repo := owner + "/" + name
-		domain := rdx.Get(repo + ":domain").Val()
+		domain := rdx.Get("domain:" + repo).Val()
 		if domain == "" {
 			ctx.Error(405, "repo not registed in gorelease, not open register for now")
 			return
 		}
 		osarch := ctx.Params(":os") + "-" + ctx.Params(":arch")
-		rdx.Incr(repo + ":dlcnt")
-		rdx.Incr(repo + ":dlcnt:" + osarch)
+		rdx.Incr("downloads:" + repo)
+		rdx.Incr("downloads:" + repo + ":" + osarch)
 		realURL := StrFormat("http://{domain}/gorelease/{name}/{branch}/{osarch}/{name}",
 			map[string]interface{}{
 				"domain": domain,
@@ -179,17 +177,17 @@ func InitApp(debug bool) *macaron.Macaron {
 
 		// Here need redis connection
 		repo := owner + "/" + name
-		domain := rdx.Get(repo + ":domain").Val()
+		domain := rdx.Get("domain:" + repo).Val()
 		if domain == "" {
 			ctx.Error(405, "repo not registed in gorelease, not open register for now")
 			return
 		}
 		log.Println("Domain:", domain)
-		rdx.Incr(repo + ":pageview")
-		pv, _ := rdx.Get(repo + ":pageview").Int64()
+		rdx.Incr("pageview:" + repo)
+		pv, _ := rdx.Get("pageview:" + repo).Int64()
 
 		ctx.Data["PageView"] = pv
-		ctx.Data["DlCount"], _ = rdx.Get(repo + ":dlcnt").Int64()
+		ctx.Data["DlCount"], _ = rdx.Get("downloads:" + repo).Int64()
 
 		ctx.Data["Name"] = name
 		ctx.Data["Branch"] = branch
