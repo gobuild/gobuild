@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/common.css">
+	<script src="/jquery.min.js"></script>
+	<title>gorelease - {{.Name}}</title>
+</head>
+<body>
+	<div id="page">
+        <h1>Token <small> for {{.User.Name}}</h1>
+        <pre><code>{{.Token}}</code></pre>
+        <div>
+        </div>
+		<div id="footer">
+			<a href="/">homepage</a>
+			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>
+		</div>
+	</div>
+	<script src="/components/moment/moment.js"></script>
+	<script>
+	</script>
+	{{template "analysis" .}}
+</body>
+</html>

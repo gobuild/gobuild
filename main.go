@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -130,7 +129,16 @@ func InitApp(debug bool) *macaron.Macaron {
 			ctx.Error(500, err.Error())
 			return
 		}
-		io.WriteString(ctx.Resp, tokens.Access()+" "+user.Name)
+		rdx.Set("user:"+user.Login+":github_token", tokens.Access(), 0)
+		tokenKey := "user:" + user.Login + ":token"
+		if !rdx.Exists(tokenKey).Val() {
+			rdx.Set(tokenKey, "gr"+RandNString(40), 0)
+		}
+		token := rdx.Get(tokenKey).Val()
+		rdx.SAdd("token:"+token+":keys", user.Login)
+		ctx.Data["User"] = user
+		ctx.Data["Token"] = token
+		ctx.HTML(200, "token")
 	})
 
 	app.Get("/", func(ctx *macaron.Context) {

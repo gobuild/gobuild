@@ -20,6 +20,7 @@ func New(token oauth2.Tokens) *Github {
 }
 
 type User struct {
+	Login   string `json:"login"`
 	Name    string `json:"name"`
 	Email   string `json:"email"`
 	Company string `json:"company"`
