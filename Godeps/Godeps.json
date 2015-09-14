@@ -15,8 +15,32 @@
 			"Rev": "d5cac425555ca5cf00694df246e04f05e6a55150"
 		},
 		{
+			"ImportPath": "github.com/gorelease/oauth2",
+			"Rev": "7639baf617561a890d3f0feccbd98d9ac206d1f7"
+		},
+		{
 			"ImportPath": "github.com/macaron-contrib/bindata",
 			"Rev": "8034104f1486732c68b88433eaac22a20ee9040a"
+		},
+		{
+			"ImportPath": "github.com/macaron-contrib/session",
+			"Rev": "e48134e803fa0694f7838508027386b941ede3fa"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "db8e4de5b2d6653f66aea53094624468caad15d2"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2",
+			"Rev": "ad0128250e8fba646a92ca9129716e523d63ef9f"
+		},
+		{
+			"ImportPath": "google.golang.org/cloud/compute/metadata",
+			"Rev": "cfb38892799f3ab2e4d07dafa62a8ed7976683c7"
+		},
+		{
+			"ImportPath": "google.golang.org/cloud/internal",
+			"Rev": "cfb38892799f3ab2e4d07dafa62a8ed7976683c7"
 		},
 		{
 			"ImportPath": "gopkg.in/bsm/ratelimit.v1",

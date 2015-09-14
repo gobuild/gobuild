@@ -4,16 +4,21 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
 	"strings"
 
 	"github.com/Unknwon/macaron"
+	"github.com/gorelease/gorelease/github"
 	"github.com/gorelease/gorelease/public"
 	"github.com/gorelease/gorelease/templates"
+	"github.com/gorelease/oauth2"
 	"github.com/macaron-contrib/bindata"
-	"gopkg.in/redis.v3"
+	"github.com/macaron-contrib/session"
+	goauth2 "golang.org/x/oauth2"
+	redis "gopkg.in/redis.v3"
 )
 
 var debug = flag.Bool("debug", false, "enable debug mode")
@@ -85,6 +90,15 @@ func StrFormat(format string, kv map[string]interface{}) string {
 
 func InitApp(debug bool) *macaron.Macaron {
 	app := macaron.Classic()
+	app.Use(session.Sessioner())
+	app.Use(oauth2.Github(
+		&goauth2.Config{
+			ClientID:     os.Getenv("GITHUB_CLIENT_ID"),
+			ClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
+			Scopes:       []string{"user:email", "public_repo"},
+			RedirectURL:  "",
+		},
+	))
 	if debug {
 		app.Use(macaron.Renderer())
 	} else {
@@ -108,6 +122,16 @@ func InitApp(debug bool) *macaron.Macaron {
 			}),
 		}))
 	}
+
+	app.Get("/token", oauth2.LoginRequired, func(tokens oauth2.Tokens, ctx *macaron.Context) {
+		gh := github.New(tokens)
+		user, err := gh.User()
+		if err != nil {
+			ctx.Error(500, err.Error())
+			return
+		}
+		io.WriteString(ctx.Resp, tokens.Access()+" "+user.Name)
+	})
 
 	app.Get("/", func(ctx *macaron.Context) {
 		ctx.Data["Host"] = ctx.Req.Host
