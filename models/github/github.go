@@ -6,15 +6,13 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-
-	"github.com/gorelease/oauth2"
 )
 
 type Github struct {
-	token oauth2.Tokens
+	token string
 }
 
-func New(token oauth2.Tokens) *Github {
+func New(token string) *Github {
 	return &Github{
 		token: token,
 	}
@@ -53,7 +51,7 @@ func (t *Github) decode(apiPath string, query url.Values, v interface{}) error {
 	if query == nil {
 		query = u.Query()
 	}
-	query.Set("access_token", t.token.Access())
+	query.Set("access_token", t.token)
 	u.RawQuery = query.Encode()
 	resp, err := http.Get(u.String())
 	if err != nil {

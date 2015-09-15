@@ -7,8 +7,12 @@ import (
 	"github.com/gorelease/oauth2"
 )
 
+func init() {
+	//time.Sleep(time.Hour *1)
+}
+
 func Token(tokens oauth2.Tokens, ctx *macaron.Context) {
-	gh := github.New(tokens)
+	gh := github.New(tokens.Access())
 	user, err := gh.User()
 	if err != nil {
 		ctx.Error(500, err.Error())
@@ -25,11 +29,16 @@ func Token(tokens oauth2.Tokens, ctx *macaron.Context) {
 	if !rdx.Exists(tokenKey).Val() {
 		rdx.Set(tokenKey, "gr"+goutils.RandNString(40), 0)
 	}
+	reposKey := "orgs:" + user.Login + ":repos"
+	if !rdx.Exists(reposKey).Val() {
+		for _, repo := range repos {
+			rdx.HMSet(reposKey, repo.Fullname, "")
+		}
+	}
 	token := rdx.Get(tokenKey).Val()
 	rdx.SAdd("token:"+token+":orgs", user.Login)
 	ctx.Data["User"] = user
 	ctx.Data["Token"] = token
 	ctx.Data["Repos"] = repos
 	ctx.HTML(200, "token")
-
 }
