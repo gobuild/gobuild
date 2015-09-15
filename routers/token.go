@@ -14,6 +14,12 @@ func Token(tokens oauth2.Tokens, ctx *macaron.Context) {
 		ctx.Error(500, err.Error())
 		return
 	}
+	repos, err := gh.Repositories()
+	if err != nil {
+		ctx.Error(500, err.Error())
+		return
+	}
+
 	rdx.Set("user:"+user.Login+":github_token", tokens.Access(), 0)
 	tokenKey := "user:" + user.Login + ":token"
 	if !rdx.Exists(tokenKey).Val() {
@@ -23,5 +29,7 @@ func Token(tokens oauth2.Tokens, ctx *macaron.Context) {
 	rdx.SAdd("token:"+token+":orgs", user.Login)
 	ctx.Data["User"] = user
 	ctx.Data["Token"] = token
+	ctx.Data["Repos"] = repos
 	ctx.HTML(200, "token")
+
 }

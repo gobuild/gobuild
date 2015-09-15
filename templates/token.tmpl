@@ -13,6 +13,13 @@
         <pre><strong>GORELEASE_TOKEN</strong> <code>{{.Token}}</code></pre>
         <div>
         </div>
+		<div>
+			<ul>
+				{{range .Repos}}
+				<li>{{.Fullname}}</li>
+				{{end}}
+			</ul>
+		</div>
 		<div id="footer">
 			<a href="/">homepage</a>
 			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>
