@@ -21,7 +21,7 @@ The simplest `travis.yml` is like
 
 	language: go
 	go:
-	  - 1.4
+	  - 1.5
 	script:
 	  - go test -v ./...
 	after_success:
