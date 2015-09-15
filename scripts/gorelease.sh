@@ -26,10 +26,11 @@ then
 	SECRET_KEY=gFatds2RE8MWZSqbVOwsztp8EAqtHUOnWC6NGKVU
 	BUCKET=gorelease
 else
+	#ACCESS_KEY=${ACCESS_KEY:?}
+	#SECRET_KEY=${SECRET_KEY:?}
+	#BUCKET=${BUCKET:?}
+	GORELEASE_TOKEN=${GORELEASE_TOKEN:?}
 	BRANCH=${TRAVIS_BRANCH:-$TRAVIS_TAG}
-	ACCESS_KEY=${ACCESS_KEY:?}
-	SECRET_KEY=${SECRET_KEY:?}
-	BUCKET=${BUCKET:?}
 fi
 KEY_PREFIX=/gorelease/${PWD#*/src/github.com}/${BRANCH:?}/
 
@@ -71,9 +72,9 @@ gox -os "$BUILD_OS" -output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}"
 cat > $TMPDIR/conf.ini <<EOF
 [qiniu]
 uphost = http://up.qiniug.com
-bucket = $BUCKET
-accesskey = "$ACCESS_KEY"
-secretkey = "$SECRET_KEY"
+bucket = ""
+accesskey = ""
+secretkey = ""
 keyprefix = $KEY_PREFIX
 
 [local]
