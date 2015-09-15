@@ -13,7 +13,7 @@ set -o pipefail
 
 echo "Is Pull Request: $TRAVIS_PULL_REQUEST"
 # Set environment variables
-GORELEASE_GO_VERSION="1.4"
+GORELEASE_GO_VERSION="1.5"
 BUILD_OS=${1:-"windows linux darwin"}
 TMPDIR=$PWD/gorelease-temp
 BRANCH=
@@ -45,7 +45,10 @@ fi
 if test -n "$TRAVIS"
 then
 	go get github.com/mitchellh/gox
-	gox -os="${BUILD_OS}" -build-toolchain
+	if test $GORELEASE_GO_VERSION != "1.5"
+	then
+		gox -os="${BUILD_OS}" -build-toolchain
+	fi
 	go get github.com/gorelease/qsync
 else
 	BUILD_OS="darwin"
