@@ -36,7 +36,7 @@ func Token(tokens oauth2.Tokens, ctx *macaron.Context) {
 		}
 	}
 	token := rdx.Get(tokenKey).Val()
-	rdx.SAdd("token:"+token+":orgs", user.Login)
+	rdx.Set("token:"+token+":user", user.Login, 0)
 	ctx.Data["User"] = user
 	ctx.Data["Token"] = token
 	ctx.Data["Repos"] = repos
