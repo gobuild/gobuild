@@ -20,7 +20,7 @@ func Token(tokens oauth2.Tokens, ctx *macaron.Context) {
 		rdx.Set(tokenKey, "gr"+goutils.RandNString(40), 0)
 	}
 	token := rdx.Get(tokenKey).Val()
-	rdx.SAdd("token:"+token+":keys", user.Login)
+	rdx.SAdd("token:"+token+":orgs", user.Login)
 	ctx.Data["User"] = user
 	ctx.Data["Token"] = token
 	ctx.HTML(200, "token")

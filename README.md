@@ -69,6 +69,38 @@ Use redis db:0
 	$ go build
 	$ ./gorelease -debug	
 
+## Design
+Redis storage.
+
+	> GET user:codeskyblue:github_token
+	# github token
+
+	> GET user:codeskyblue:token
+	# web token, need to set in travis, ex
+	grABCDEFG
+
+	> SMEMBERS token:grABCDEFG:orgs
+	# list token orgnization, which org can upload use this token
+	1) "codeskyblue"
+	2) "gorelease"
+
+	> HGETALL orgs:codeskybule:repos
+	# list repos under org, and the store domain
+	1) "gosuv"
+	2) "dn-gobuild5.qbox.me"
+	3) "syncgit"
+	4) ""
+
+	> GET downloads:codeskyblue/gosuv
+	# total number of downloads
+
+	> GET downloads:codeskyblue/gosuv:linux-amd64
+	# total number of download linux-amd64 binary
+
+	> GET pageview:codeskyblue/gosuv
+	# download page PV
+	
+
 ## Contribute
 All pull request and suggestions are welcomed. Just make sure the you have tested the code.
 
