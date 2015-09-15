@@ -1,4 +1,4 @@
-jackage main
+package main
 
 import (
 	"flag"
