@@ -15,6 +15,10 @@
 			"Rev": "d5cac425555ca5cf00694df246e04f05e6a55150"
 		},
 		{
+			"ImportPath": "github.com/franela/goreq",
+			"Rev": "72c51a544272e007ab3da4f7d9ac959b7af7af03"
+		},
+		{
 			"ImportPath": "github.com/gorelease/oauth2",
 			"Rev": "7639baf617561a890d3f0feccbd98d9ac206d1f7"
 		},

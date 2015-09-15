@@ -32,7 +32,7 @@ else
 	GORELEASE_TOKEN=${GORELEASE_TOKEN:?}
 	BRANCH=${TRAVIS_BRANCH:-$TRAVIS_TAG}
 fi
-KEY_PREFIX=/gorelease/${PWD#*/src/github.com}/${BRANCH:?}/
+KEY_PREFIX=/gorelease${PWD#*/src/github.com}/${BRANCH:?}/
 
 echo "Branch: $BRANCH"
 echo "KeyPrefix: $KEY_PREFIX"
