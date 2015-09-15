@@ -30,9 +30,8 @@ else
 	ACCESS_KEY=${ACCESS_KEY:?}
 	SECRET_KEY=${SECRET_KEY:?}
 	BUCKET=${BUCKET:?}
-
 fi
-KEY_PREFIX=gorelease/$(basename $PWD)/${BRANCH:?}/
+KEY_PREFIX=/gorelease/${PWD#*/src/github.com}/${BRANCH:?}/
 
 echo "Branch: $BRANCH"
 echo "KeyPrefix: $KEY_PREFIX"
