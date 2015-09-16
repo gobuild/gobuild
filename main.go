@@ -119,7 +119,7 @@ func InitApp(debug bool) *macaron.Macaron {
 		domain := "dn-gobuild5.qbox.me"
 		buildJson := fmt.Sprintf("//%s/gorelease/%s/%s/%s/%s", domain, org, name, branch, "builds.json")
 		res, err := goreq.Request{
-			Method: "HEAD",
+			Method: "GET",
 			Uri:    "http:" + buildJson,
 		}.Do()
 		if err != nil { //|| res.StatusCode != http.StatusOK {
