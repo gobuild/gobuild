@@ -10,14 +10,18 @@
 	<div id="page">
         <h1>Token</h1>
 		<p> user: {{.User.Name}}</p>
-        <pre><strong>GORELEASE_TOKEN</strong> <code>{{.Token}}</code></pre>
+        <pre><strong>GORELEASE_TOKEN</strong> <input type="text" class="click-select" value='{{.Token}}'></pre>
         <div>
         </div>
 		<div>
 			<a href="/token?refresh=true">Refresh</a>
 			<ul>
 				{{range .Repos}}
-				<li>{{.Fullname}}</li>
+				<li>
+					<a href="https://github.com/{{.Fullname}}">github</a>
+					<a href="https://travis-ci.org/{{.Fullname}}/settings">travis</a>
+					<a href="/{{.Fullname}}">{{.Fullname}}</a>
+				</li>
 				{{end}}
 			</ul>
 		</div>
