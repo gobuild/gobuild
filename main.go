@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/Unknwon/macaron"
 	"github.com/franela/goreq"
@@ -121,8 +122,9 @@ func InitApp(debug bool) *macaron.Macaron {
 			Method: "HEAD",
 			Uri:    "http:" + buildJson,
 		}.Do()
+		log.Println(res.StatusCode, res.Status)
 		if err != nil || res.StatusCode != http.StatusOK {
-			ctx.Error(406, "No downloads avaliable now.")
+			ctx.Error(406, "No downloads avaliable now.: +"+strconv.Itoa(res.StatusCode))
 			return
 		}
 
