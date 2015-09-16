@@ -12,10 +12,6 @@
 		<div class="build-info">
 			<table>
 				<tr>
-					<th>pageview</th>
-					<td>{{.PageView}}</td>
-				</tr>
-				<tr>
 					<th>download</th>
 					<td>{{.DlCount}}</th>
 				</tr>
@@ -65,6 +61,7 @@
 				})
 				.error(function(res){
 					$("div.build-info").hide();
+                    document.write("Downloads not avaliable");
 				});
 		});
 	</script>
