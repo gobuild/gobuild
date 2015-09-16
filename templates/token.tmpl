@@ -4,6 +4,13 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="/common.css">
 	<script src="/jquery.min.js"></script>
+	<script>
+	$(function(){
+		$(document).on("click", "input.click-select", function(e) {
+			$(e.target).select();
+		});
+	});
+	</script>
 	<title>gorelease - {{.Name}}</title>
 </head>
 <body>
@@ -20,7 +27,7 @@
 				<li>
 					<a href="https://github.com/{{.Fullname}}">github</a>
 					<a href="https://travis-ci.org/{{.Fullname}}/settings">travis</a>
-					<a href="/{{.Fullname}}">{{.Fullname}}</a>
+					<a style="color: black" href="/{{.Fullname}}">{{.Fullname}}</a>
 				</li>
 				{{end}}
 			</ul>
