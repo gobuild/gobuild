@@ -13,7 +13,7 @@ set -o pipefail
 
 echo "Is Pull Request: $TRAVIS_PULL_REQUEST"
 # Set environment variables
-GORELEASE_GO_VERSION="1.4"
+GORELEASE_GO_VERSION="1.5"
 BUILD_OS=${1:-"windows linux darwin"}
 TMPDIR=$PWD/gorelease-temp
 BRANCH=
@@ -26,13 +26,13 @@ then
 	SECRET_KEY=gFatds2RE8MWZSqbVOwsztp8EAqtHUOnWC6NGKVU
 	BUCKET=gorelease
 else
+	#ACCESS_KEY=${ACCESS_KEY:?}
+	#SECRET_KEY=${SECRET_KEY:?}
+	#BUCKET=${BUCKET:?}
+	GORELEASE_TOKEN=${GORELEASE_TOKEN:?}
 	BRANCH=${TRAVIS_BRANCH:-$TRAVIS_TAG}
-	ACCESS_KEY=${ACCESS_KEY:?}
-	SECRET_KEY=${SECRET_KEY:?}
-	BUCKET=${BUCKET:?}
-
 fi
-KEY_PREFIX=gorelease/$(basename $PWD)/${BRANCH:?}/
+KEY_PREFIX=/gorelease${PWD#*/src/github.com}/${BRANCH:?}/
 
 echo "Branch: $BRANCH"
 echo "KeyPrefix: $KEY_PREFIX"
@@ -46,7 +46,10 @@ fi
 if test -n "$TRAVIS"
 then
 	go get github.com/mitchellh/gox
-	gox -os="${BUILD_OS}" -build-toolchain
+	if test $GORELEASE_GO_VERSION != "1.5"
+	then
+		gox -os="${BUILD_OS}" -build-toolchain
+	fi
 	go get github.com/gorelease/qsync
 else
 	BUILD_OS="darwin"
@@ -69,9 +72,9 @@ gox -os "$BUILD_OS" -output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}"
 cat > $TMPDIR/conf.ini <<EOF
 [qiniu]
 uphost = http://up.qiniug.com
-bucket = $BUCKET
-accesskey = "$ACCESS_KEY"
-secretkey = "$SECRET_KEY"
+bucket = ""
+accesskey = ""
+secretkey = ""
 keyprefix = $KEY_PREFIX
 
 [local]

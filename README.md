@@ -1,6 +1,6 @@
 # gorelease
 [![Build Status](https://travis-ci.org/gorelease/gorelease.svg?branch=master)](https://travis-ci.org/gorelease/gorelease)
-[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/dn-gobuild5.qbox.me/gorelease/master)
+[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/gorelease/gorelease)
 
 For easily build go cross platform online and share your binary.
 
@@ -12,16 +12,16 @@ This project is not stable for now.
 ## How to use gorelease
 It is very simple to use gorelease. Before doing everything, make sure this repo have integrate with <https://travis-ci.org>
 
-Just add two lines to your `travis.yml`.
+Add two lines to your `travis.yml`.
 
 	after_success:
 	  - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease
 
-The simplest `travis.yml` is like
+After doing that, your `travis.yml` is like
 
 	language: go
 	go:
-	  - 1.4
+	  - 1.5
 	script:
 	  - go test -v ./...
 	after_success:

@@ -4,15 +4,34 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="/common.css">
 	<script src="/jquery.min.js"></script>
+	<script>
+	$(function(){
+		$(document).on("click", "input.click-select", function(e) {
+			$(e.target).select();
+		});
+	});
+	</script>
 	<title>gorelease - {{.Name}}</title>
 </head>
 <body>
 	<div id="page">
         <h1>Token</h1>
 		<p> user: {{.User.Name}}</p>
-        <pre><strong>GORELEASE_TOKEN</strong> <code>{{.Token}}</code></pre>
+        <pre><strong>GORELEASE_TOKEN</strong> <input type="text" class="click-select" value='{{.Token}}'></pre>
         <div>
         </div>
+		<div>
+			<a href="/token?refresh=true">Refresh</a>
+			<ul>
+				{{range .Repos}}
+				<li>
+					<a href="https://github.com/{{.Fullname}}">github</a>
+					<a href="https://travis-ci.org/{{.Fullname}}/settings">travis</a>
+					<a style="color: black" href="/{{.Fullname}}">{{.Fullname}}</a>
+				</li>
+				{{end}}
+			</ul>
+		</div>
 		<div id="footer">
 			<a href="/">homepage</a>
 			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>
