@@ -122,9 +122,13 @@ func InitApp(debug bool) *macaron.Macaron {
 			Method: "HEAD",
 			Uri:    "http:" + buildJson,
 		}.Do()
-		log.Println(res.StatusCode, res.Status)
-		if err != nil || res.StatusCode != http.StatusOK {
-			ctx.Error(406, "No downloads avaliable now.: +"+strconv.Itoa(res.StatusCode))
+		if err != nil { //|| res.StatusCode != http.StatusOK {
+			ctx.Error(406, err.Error())
+			return
+		}
+		if res.StatusCode != http.StatusOK {
+			ctx.Error(407, "No downloads avaliable now.: +"+strconv.Itoa(res.StatusCode))
+			log.Println(res.StatusCode, res.Status)
 			return
 		}
 
