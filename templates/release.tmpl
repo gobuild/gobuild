@@ -16,7 +16,7 @@
 				</tr>
 				<tr>
 					<th>go version</th>
-					<td><span id="goversion">unknown</span></td>
+					<td><span id="goversion">...</span></td>
 				</tr>
 				<tr>
 					<th>format</th>
@@ -24,7 +24,7 @@
 				</tr>
 				<tr>
 					<th>updated</th>
-					<td><span id="update-at">unknown</span></td>
+					<td><span id="update-at">...</span></td>
 				</tr>
 			</table>
 		</div>
@@ -63,7 +63,7 @@
 				.success(function(res){
 					var upTime = moment.unix(res.update_time);
 					var fromNow = upTime.fromNow();
-					var format = res.format || "";
+					var format = res.format || "single";
 
 					$updateAt.text(fromNow);
 					$("#goversion").text(res.go_version);
