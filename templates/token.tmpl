@@ -1,27 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="/common.css">
-	<script src="/jquery.min.js"></script>
-	<script>
-	$(function(){
-		$(document).on("click", "input.click-select", function(e) {
-			$(e.target).select();
-		});
+{{template "header" .}}
+<script>
+$(function(){
+	$(document).on("click", "input.click-select", function(e) {
+		$(e.target).select();
 	});
-	</script>
-	<title>gorelease - {{.Name}}</title>
-</head>
+});
+</script>
 <body>
-	<div id="page">
+	{{template "nav" .}}
+	<div class="container">
         <h1>Token</h1>
 		<p> user: {{.User.Name}}</p>
-        <pre><strong>GORELEASE_TOKEN</strong> <input type="text" class="click-select" value='{{.Token}}'></pre>
+        <strong>GORELEASE_TOKEN</strong>
+        <input type="text" class="click-select form-control" value='{{.Token}}'>
         <div>
         </div>
 		<div>
-			<a href="/token?refresh=true">Refresh</a>
+			<a href="/token?refresh=true" class="btn btn-info btn-xm">Refresh</a>
 			<ul>
 				{{range .Repos}}
 				<li>
@@ -37,9 +32,7 @@
 			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>
 		</div>
 	</div>
-	<script src="/components/moment/moment.js"></script>
-	<script>
-	</script>
 	{{template "analysis" .}}
+	{{template "forkme" .}}
 </body>
 </html>

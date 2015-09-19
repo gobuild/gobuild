@@ -1,5 +1,6 @@
 {{template "header" .}}
 <body>
+	{{template "nav" .}}
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -12,7 +13,7 @@
 				<p>Then your repo dist download address is 
 					<a href="http://{{.Host}}/gorelease/gorelease">http://{{.Host}}/gorelease/gorelease</a>
 				</p>
-				<p><a href="/token">Click</a> to get your token</p>
+				<p><a href="/token" class="btn btn-xm btn-info">Click</a> to get your token</p>
 			</div>
 			<hr>
 			{{template "forkme" .}}
