@@ -12,4 +12,4 @@ excludes:
   - \.git
   - .*\.go
 script:
-  - godep go install
+  - godep go build
