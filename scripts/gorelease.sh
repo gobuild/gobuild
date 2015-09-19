@@ -21,10 +21,8 @@ BRANCH=
 if test -z "$TRAVIS"
 then
 	# Here for my test
-	BRANCH=$(git symbolic-ref --short HEAD)
-	ACCESS_KEY=V6cm-H-uL5Lh0hrPbF28Y1KJ99dW8d2p9lUQRDMJ
-	SECRET_KEY=gFatds2RE8MWZSqbVOwsztp8EAqtHUOnWC6NGKVU
-	BUCKET=gorelease
+	GORELEASE_TOKEN=12345678
+	BRANCH=master
 else
 	#ACCESS_KEY=${ACCESS_KEY:?}
 	#SECRET_KEY=${SECRET_KEY:?}
@@ -61,13 +59,21 @@ DISTDIR=$TMPDIR/dist
 
 # FIXME(ssx): need support build pack
 # build standalone
-gox -os "$BUILD_OS" -output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}"
-
-#GOOS=$(go env GOOS)
-#GOARCH=$(go env GOARCH)
-#wget -q http://devtools.qiniu.com/qiniu-devtools-${GOOS}_${GOARCH}-current.tar.gz -O- | tar -xz -C $TMPDIR
-#/bin/rm -fr $HOME/.qrsync
-
+if test -f .gopack.yml
+then
+	go get github.com/gorelease/gopack
+	gopack all \
+		--output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}.zip" \
+		--json "$DISTDIR/builds.json"
+else
+	gox -os "$BUILD_OS" -output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}"
+cat > $DISTDIR/builds.json <<EOF
+{
+	"update_time": $(date +%s),
+	"go_version": "$GORELEASE_GO_VERSION"
+}
+EOF
+fi
 
 cat > $TMPDIR/conf.ini <<EOF
 [qiniu]
@@ -86,13 +92,6 @@ host = "qntoken.herokuapp.com"
 EOF
 
 set -eu
-
-cat > $DISTDIR/builds.json <<EOF
-{
-	"update_time": $(date +%s),
-	"go_version": "$GORELEASE_GO_VERSION"
-}
-EOF
 
 # upload
 qsync -c $TMPDIR/conf.ini

@@ -105,7 +105,7 @@ func InitApp(debug bool) *macaron.Macaron {
 
 	app.Get("/", routers.Homepage)
 	app.Get("/token", oauth2.LoginRequired, routers.Token)
-	app.Get("/:owner/:name/downloads/:os/:arch", routers.DownloadRedirect)
+	app.Post("/stats/:org/:name/:branch/:os/:arch", routers.DownloadStats)
 
 	app.Get("/:org/:name", func(ctx *macaron.Context, r *http.Request) {
 		org := ctx.Params(":org")
@@ -116,31 +116,16 @@ func InitApp(debug bool) *macaron.Macaron {
 		repoPath := org + "/" + name
 		domain := "dn-gobuild5.qbox.me"
 		buildJson := fmt.Sprintf("//%s/gorelease/%s/%s/%s/%s", domain, org, name, branch, "builds.json")
-		/*
-			res, err := goreq.Request{
-				Method: "GET",
-				Uri:    "http:" + buildJson,
-			}.Do()
-			if err != nil {
-				ctx.Error(500, err.Error())
-				return
-			}
-			if res.StatusCode != http.StatusOK {
-				ctx.Error(500, "No downloads avaliable now.: +"+strconv.Itoa(res.StatusCode))
-				log.Println(res.StatusCode, res.Status)
-				return
-			}
-		*/
 
 		//rdx.Incr("pageview:" + repoPath)
 		//pv, _ := rdx.Get("pageview:" + repoPath).Int64()
 		//ctx.Data["PageView"] = pv
 
 		ctx.Data["DlCount"], _ = rdx.Get("downloads:" + repoPath).Int64()
+		ctx.Data["Org"] = org
 		ctx.Data["Name"] = name
 		ctx.Data["Branch"] = branch
 		ctx.Data["BuildJSON"] = template.URL(buildJson)
-		//rels := make([]*Release, 0)
 		prepo := &Repo{
 			Domain: domain,
 			Org:    org,
