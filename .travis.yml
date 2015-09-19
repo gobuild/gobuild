@@ -2,5 +2,6 @@ language: go
 go:
   - 1.5
 script:
+  - go get -v github.com/tools/godep
   - go test -v ./...
   - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease
