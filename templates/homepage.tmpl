@@ -1,29 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>gorelease</title>
-	<link rel="icon" href="/favicon.png">
-	<link rel="stylesheet" href="/common.css">
-</head>
+{{template "header" .}}
 <body>
-	<div id="page">
-		<h1>gorelease</h1>
-		<p>Welcome, see <a href="https://github.com/codeskyblue/gorelease">doc</a> for more information.</p>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>gorelease</h1>
+				<p>Welcome, see <a href="https://github.com/codeskyblue/gorelease">doc</a> for more information.</p>
+				<h2>Download address</h2>
+				<p>qiniu subdomain name, ex: <code>dn-gobuild5.qbox.me</code></p>
+				<p>your repo name, ex: <code>gorelease</code></p>
+				<p>your repo branch, ex: <code>master</code></p>
+				<p>Then your repo dist download address is 
+					<a href="http://{{.Host}}/gorelease/gorelease">http://{{.Host}}/gorelease/gorelease</a>
+				</p>
+				<p><a href="/token">Click</a> to get your token</p>
+			</div>
+			<hr>
+			{{template "forkme" .}}
+			{{template "footer" .}}
+			{{template "analysis" .}}
 		<div>
-			<h2>Download address</h2>
-			<p>qiniu subdomain name, ex: <code>dn-gobuild5.qbox.me</code></p>
-			<p>your repo name, ex: <code>gorelease</code></p>
-			<p>your repo branch, ex: <code>master</code></p>
-			<p>Then your repo dist download address is 
-				<a href="http://{{.Host}}/gorelease/gorelease">http://{{.Host}}/gorelease/gorelease</a>
-			</p>
-			<p><a href="/token">Click</a> to get your token</p>
-		</div>
-		{{template "forkme" .}}
-		<hr>
-		{{template "footer" .}}
-		{{template "analysis" .}}
 	</div>
 </body>
 </html>
