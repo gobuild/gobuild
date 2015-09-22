@@ -6,9 +6,6 @@ For easily build go cross platform online and share your binary.
 
 With this project help you will have a download page. ex: <http://gorelease.herokuapp.com/gorelease/gorelease>
 
-## Not stable
-This project is not stable for now.
-
 ## How to use gorelease
 It is very simple to use gorelease. Before doing everything, make sure this repo have integrate with <https://travis-ci.org>
 
