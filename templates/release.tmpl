@@ -21,6 +21,10 @@
 					<th>updated</th>
 					<td><span id="update-at">...</span></td>
 				</tr>
+				<tr>
+					<th>comment</th>
+					<td><span id="comment">...</span></td>
+				</tr>
 			</table>
 		</div>
 		<hr>
@@ -68,6 +72,7 @@
 					$updateAt.text(fromNow);
 					$("#goversion").text(res.go_version);
 					$("#format").text(format);
+					$("#comment").text(res.comment || "");
 
 					$("div.downloads").show();
 
