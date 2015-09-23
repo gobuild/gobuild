@@ -108,9 +108,16 @@ func InitApp(debug bool) *macaron.Macaron {
 	app.Post("/stats/:org/:name/:branch/:os/:arch", routers.DownloadStats)
 
 	app.Get("/:org/:name", func(ctx *macaron.Context, r *http.Request) {
+		//org := ctx.Params(":org")
+		//name := ctx.Params(":name")
+		//branch := "master"
+		ctx.Redirect(r.RequestURI+"/"+"master", 302)
+	})
+
+	app.Get("/:org/:name/:branch", func(ctx *macaron.Context, r *http.Request) {
 		org := ctx.Params(":org")
 		name := ctx.Params(":name")
-		branch := "master"
+		branch := ctx.Params(":branch")
 
 		// Here need redis connection
 		repoPath := org + "/" + name
