@@ -12,6 +12,8 @@ set -e
 set -o pipefail
 
 echo "Is Pull Request: $TRAVIS_PULL_REQUEST"
+
+# FIXME(ssx): only support go1.5 now
 # Set environment variables
 GORELEASE_GO_VERSION="1.5"
 BUILD_OS=${1:-"windows linux darwin"}
@@ -24,17 +26,14 @@ then
 	GORELEASE_TOKEN=12345678
 	BRANCH=master
 else
-	#ACCESS_KEY=${ACCESS_KEY:?}
-	#SECRET_KEY=${SECRET_KEY:?}
-	#BUCKET=${BUCKET:?}
 	GORELEASE_TOKEN=${GORELEASE_TOKEN:-"$GRTOKEN"}
 	GORELEASE_TOKEN=${GORELEASE_TOKEN:?}
 	BRANCH=${TRAVIS_BRANCH:-$TRAVIS_TAG}
 fi
 KEY_PREFIX=/gorelease${PWD#*/src/github.com}/${BRANCH:?}/
 
-echo "Branch: $BRANCH"
-echo "KeyPrefix: $KEY_PREFIX"
+echo "BRANCH: $BRANCH"
+echo "PREFIX: $KEY_PREFIX"
 
 if test -n "$TRAVIS" -a "X$TRAVIS_GO_VERSION" != "X$GORELEASE_GO_VERSION"; then
 	echo "Expect go$GORELEASE_GO_VERSION, but travis got go$TRAVIS_GO_VERSION"
@@ -62,6 +61,7 @@ DISTDIR=$TMPDIR/dist
 # build standalone
 if test -f .gopack.yml
 then
+    go get github.com/tools/godep
 	go get github.com/gorelease/gopack
 	gopack all \
 		--output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}.zip" \
