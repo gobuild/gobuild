@@ -14,6 +14,33 @@ $(function(){
 			<span class="input-group-addon">GRTOKEN</span>
 			<input type="text" class="click-select form-control" value='{{.Token}}'>
         </div>
+        <div>   
+            <a href="https://travis-ci.org" target="_blank">Goto Travis</a>
+            <p>After you enable your repo in travis, create two files <code>.travis.yml .gopack.yml</code> in your repo</p>
+            <h4>Example of <small>.travis.yml</small></h4>
+            <pre>language: go
+go:
+  - 1.5
+script:
+  - go test -v ./...
+after_success:
+  - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease</pre>
+        </div>
+        <div>
+            <h4>Example of <small>.gopack.yml</small></h4>
+            <pre>author: shengxiang
+description: '...'
+includes:
+  - README.md
+  - LICENSE
+  - conf
+  - templates
+  - public
+excludes:
+  - \.git
+script:
+  - godep go build</pre>
+        </div>
 		<div>
 			<a href="/token?refresh=true" class="btn btn-info btn-xm">Refresh</a>
 			<ul>
