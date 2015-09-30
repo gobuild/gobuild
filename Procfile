@@ -1,1 +1,1 @@
-web: gorelease -debug
+web: bower install && gorelease -debug

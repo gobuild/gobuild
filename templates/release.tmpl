@@ -1,8 +1,19 @@
 {{template "header" .}}
 <body>
 	{{template "nav" .}}
+	<script src="/components/clipboard/dist/clipboard.min.js"></script>
 	<div class="container">
 		<h1>{{.Name}} <small>{{.Branch}}</small></h1>
+		<div id="badge">
+			<h3>Badge</h3>
+			<span><img src="//dn-gorelease.qbox.me/gorelease-download-blue.svg"></span>
+			<div class="input-group">
+				<input id="md-badge-addr" type="text" class="form-control" value=""/>
+				<span class="input-group-btn">
+					<button data-clipboard-target="#md-badge-addr" class="btn btn-default btn-copy" alt="Copy success" type="button">Copy</button>
+				</span>
+			</div>
+		</div>
 		<div class="build-info">
 			<table>
 				<tr>
@@ -64,6 +75,18 @@
 	-->
 	<script>
 		$(function(){
+			// clipboard
+			var clipboard = new Clipboard('.btn-copy');
+			clipboard.on('success', function(e){
+				e.trigger.innerHTML = "Copied"
+			})
+			$(".btn-copy").mouseout(function(e){
+				$(this).text("Copy")
+			})
+
+			$("#md-badge-addr").val('[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)]('+location.href+')');
+
+
 			$("div.downloads").hide();
 			var $updateAt = $("#update-at");
 			$.getJSON(location.protocol+"{{.BuildJSON}}")
