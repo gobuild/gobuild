@@ -6,9 +6,6 @@ For easily build go cross platform online and share your binary.
 
 With this project help you will have a download page. ex: <http://gorelease.herokuapp.com/gorelease/gorelease>
 
-## Not stable
-This project is not stable for now.
-
 ## How to use gorelease
 It is very simple to use gorelease. Before doing everything, make sure this repo have integrate with <https://travis-ci.org>
 
@@ -31,7 +28,16 @@ Go to this link <http://gorelease.herokuapp.com/token> to get your personal toke
 
 Add the token to travis env setting page.
 
-	GORELEASE_TOKEN=grlkalsjdfads....
+	GRTOKEN=grlkalsjdfads....
+
+If you want to pack some other stuff. You need to prepare a file `gopack.yml` in your root of you project.
+
+	$ go get github.com/gorelease/gopack
+	$ gopack init # generate gopack.yml
+
+Then modify the `gopack.yml` file. It's better to do some check use gopack tool.
+
+	$ gopack pack # package test
 
 After doing all the things. Every time you push to the github, the new builed binaries will get from <http://gorelease.herokuapp.com>
 
@@ -100,6 +106,8 @@ Redis storage.
 	> GET pageview:codeskyblue/gosuv
 	# download page PV
 	
+
+redis data backup can use: <https://github.com/p/redis-dump-load>
 
 ## Contribute
 All pull request and suggestions are welcomed. Just make sure the you have tested the code.

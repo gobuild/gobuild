@@ -12,6 +12,8 @@ set -e
 set -o pipefail
 
 echo "Is Pull Request: $TRAVIS_PULL_REQUEST"
+
+# FIXME(ssx): only support go1.5 now
 # Set environment variables
 GORELEASE_GO_VERSION="1.5"
 BUILD_OS=${1:-"windows linux darwin"}
@@ -21,21 +23,17 @@ BRANCH=
 if test -z "$TRAVIS"
 then
 	# Here for my test
-	BRANCH=$(git symbolic-ref --short HEAD)
-	ACCESS_KEY=V6cm-H-uL5Lh0hrPbF28Y1KJ99dW8d2p9lUQRDMJ
-	SECRET_KEY=gFatds2RE8MWZSqbVOwsztp8EAqtHUOnWC6NGKVU
-	BUCKET=gorelease
+	GORELEASE_TOKEN=12345678
+	BRANCH=master
 else
-	#ACCESS_KEY=${ACCESS_KEY:?}
-	#SECRET_KEY=${SECRET_KEY:?}
-	#BUCKET=${BUCKET:?}
+	GORELEASE_TOKEN=${GORELEASE_TOKEN:-"$GRTOKEN"}
 	GORELEASE_TOKEN=${GORELEASE_TOKEN:?}
 	BRANCH=${TRAVIS_BRANCH:-$TRAVIS_TAG}
 fi
 KEY_PREFIX=/gorelease${PWD#*/src/github.com}/${BRANCH:?}/
 
-echo "Branch: $BRANCH"
-echo "KeyPrefix: $KEY_PREFIX"
+echo "BRANCH: $BRANCH"
+echo "PREFIX: $KEY_PREFIX"
 
 if test -n "$TRAVIS" -a "X$TRAVIS_GO_VERSION" != "X$GORELEASE_GO_VERSION"; then
 	echo "Expect go$GORELEASE_GO_VERSION, but travis got go$TRAVIS_GO_VERSION"
@@ -61,13 +59,23 @@ DISTDIR=$TMPDIR/dist
 
 # FIXME(ssx): need support build pack
 # build standalone
-gox -os "$BUILD_OS" -output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}"
-
-#GOOS=$(go env GOOS)
-#GOARCH=$(go env GOARCH)
-#wget -q http://devtools.qiniu.com/qiniu-devtools-${GOOS}_${GOARCH}-current.tar.gz -O- | tar -xz -C $TMPDIR
-#/bin/rm -fr $HOME/.qrsync
-
+if test -f .gopack.yml
+then
+    go get github.com/tools/godep
+	go get github.com/gorelease/gopack
+	gopack all \
+		--output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}.zip" \
+		--json "$DISTDIR/builds.json"
+else
+	gox -os "$BUILD_OS" -output "$DISTDIR/{{.OS}}-{{.Arch}}/{{.Dir}}"
+cat > $DISTDIR/builds.json <<EOF
+{
+	"update_time": $(date +%s),
+	"go_version": "$GORELEASE_GO_VERSION",
+	"commit": "$TRAVIS_COMMIT"
+}
+EOF
+fi
 
 cat > $TMPDIR/conf.ini <<EOF
 [qiniu]
@@ -86,13 +94,6 @@ host = "qntoken.herokuapp.com"
 EOF
 
 set -eu
-
-cat > $DISTDIR/builds.json <<EOF
-{
-	"update_time": $(date +%s),
-	"go_version": "$GORELEASE_GO_VERSION"
-}
-EOF
 
 # upload
 qsync -c $TMPDIR/conf.ini

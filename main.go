@@ -9,7 +9,6 @@ import (
 	"os"
 
 	"github.com/Unknwon/macaron"
-	"github.com/franela/goreq"
 	"github.com/gorelease/gorelease/models"
 	"github.com/gorelease/gorelease/models/goutils"
 	"github.com/gorelease/gorelease/public"
@@ -106,36 +105,34 @@ func InitApp(debug bool) *macaron.Macaron {
 
 	app.Get("/", routers.Homepage)
 	app.Get("/token", oauth2.LoginRequired, routers.Token)
-	app.Get("/:owner/:name/downloads/:os/:arch", routers.DownloadRedirect)
+	app.Post("/stats/:org/:name/:branch/:os/:arch", routers.DownloadStats)
 
 	app.Get("/:org/:name", func(ctx *macaron.Context, r *http.Request) {
+		//org := ctx.Params(":org")
+		//name := ctx.Params(":name")
+		//branch := "master"
+		ctx.Redirect(r.RequestURI+"/"+"master", 302)
+	})
+
+	app.Get("/:org/:name/:branch", func(ctx *macaron.Context, r *http.Request) {
 		org := ctx.Params(":org")
 		name := ctx.Params(":name")
-		branch := "master"
+		branch := ctx.Params(":branch")
 
 		// Here need redis connection
 		repoPath := org + "/" + name
 		domain := "dn-gobuild5.qbox.me"
 		buildJson := fmt.Sprintf("//%s/gorelease/%s/%s/%s/%s", domain, org, name, branch, "builds.json")
-		res, err := goreq.Request{
-			Method: "HEAD",
-			Uri:    "http:" + buildJson,
-		}.Do()
-		if err != nil || res.StatusCode != http.StatusOK {
-			ctx.Error(406, "No downloads avaliable now.")
-			return
-		}
 
-		rdx.Incr("pageview:" + repoPath)
-		pv, _ := rdx.Get("pageview:" + repoPath).Int64()
+		//rdx.Incr("pageview:" + repoPath)
+		//pv, _ := rdx.Get("pageview:" + repoPath).Int64()
+		//ctx.Data["PageView"] = pv
 
-		ctx.Data["PageView"] = pv
 		ctx.Data["DlCount"], _ = rdx.Get("downloads:" + repoPath).Int64()
-
+		ctx.Data["Org"] = org
 		ctx.Data["Name"] = name
 		ctx.Data["Branch"] = branch
 		ctx.Data["BuildJSON"] = template.URL(buildJson)
-		//rels := make([]*Release, 0)
 		prepo := &Repo{
 			Domain: domain,
 			Org:    org,

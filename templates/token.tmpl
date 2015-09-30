@@ -1,27 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="/common.css">
-	<script src="/jquery.min.js"></script>
-	<script>
-	$(function(){
-		$(document).on("click", "input.click-select", function(e) {
-			$(e.target).select();
-		});
+{{template "header" .}}
+<script>
+$(function(){
+	$(document).on("click", "input.click-select", function(e) {
+		$(e.target).select();
 	});
-	</script>
-	<title>gorelease - {{.Name}}</title>
-</head>
+});
+</script>
 <body>
-	<div id="page">
-        <h1>Token</h1>
+	{{template "nav" .}}
+	<div class="container">
 		<p> user: {{.User.Name}}</p>
-        <pre><strong>GORELEASE_TOKEN</strong> <input type="text" class="click-select" value='{{.Token}}'></pre>
+		<div class="input-group">
+			<span class="input-group-addon">GRTOKEN</span>
+			<input type="text" class="click-select form-control" value='{{.Token}}'>
+        </div>
+        <div>   
+            <a href="https://travis-ci.org" target="_blank">Goto Travis</a>
+            <p>After you enable your repo in travis, create two files <code>.travis.yml .gopack.yml</code> in your repo</p>
+            <h4>Example of <small>.travis.yml</small></h4>
+            <pre>language: go
+go:
+  - 1.5
+script:
+  - go test -v ./...
+after_success:
+  - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease</pre>
+        </div>
         <div>
+            <h4>Example of <small>.gopack.yml</small></h4>
+            <pre>author: shengxiang
+description: '...'
+includes:
+  - README.md
+  - LICENSE
+  - conf
+  - templates
+  - public
+excludes:
+  - \.git
+script:
+  - godep go build</pre>
         </div>
 		<div>
-			<a href="/token?refresh=true">Refresh</a>
+			<a href="/token?refresh=true" class="btn btn-info btn-xm">Refresh</a>
 			<ul>
 				{{range .Repos}}
 				<li>
@@ -37,9 +58,7 @@
 			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>
 		</div>
 	</div>
-	<script src="/components/moment/moment.js"></script>
-	<script>
-	</script>
 	{{template "analysis" .}}
+	{{template "forkme" .}}
 </body>
 </html>

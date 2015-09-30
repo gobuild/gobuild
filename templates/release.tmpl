@@ -1,72 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="/common.css">
-	<script src="/jquery.min.js"></script>
-	<title>gorelease - {{.Name}}</title>
-</head>
+{{template "header" .}}
 <body>
-	<div id="page">
+	{{template "nav" .}}
+	<div class="container">
 		<h1>{{.Name}} <small>{{.Branch}}</small></h1>
 		<div class="build-info">
 			<table>
-				<tr>
-					<th>pageview</th>
-					<td>{{.PageView}}</td>
-				</tr>
 				<tr>
 					<th>download</th>
 					<td>{{.DlCount}}</th>
 				</tr>
 				<tr>
 					<th>go version</th>
-					<td><span id="goversion">unknown</span></td>
+					<td><span id="goversion">...</span></td>
+				</tr>
+				<tr>
+					<th>format</th>
+					<td><span id="format">...</span></td>
 				</tr>
 				<tr>
 					<th>updated</th>
-					<td><span id="update-at">unknown</span></td>
+					<td><span id="update-at">...</span></td>
+				</tr>
+				<tr>
+					<th>comment</th>
+					<td><span id="comment">...</span></td>
 				</tr>
 			</table>
 		</div>
 		<hr>
-		<table>
-			<tr>
-				<th>GOOS</th>
-				<th>GOARCH</th>
-				<th>Op.</th>
-			</tr>
-			{{range .Pubs}}
-			<tr>
-				<td>{{.OS}}</td>
-				<td>{{.Arch}}</td>
-				<td>
-					<a href="{{.Link}}">Download</a>
-				</td>
-			</tr>
-			<!-- ref download page: https://ottoproject.io/downloads.html -->
-			<!-- or this page: https://code.visualstudio.com/Download -->
-			{{end}}
-		</table>
+
+		<!-- ref download page: https://ottoproject.io/downloads.html -->
+		<!-- or this page: https://code.visualstudio.com/Download -->
+		<div class="downloads">
+			<table class="table">
+				<tr>
+					<th>GOOS</th>
+					<th>GOARCH</th>
+					<th>Op.</th>
+				</tr>
+				{{range .Pubs}}
+				<tr>
+					<td>{{.OS}}</td>
+					<td>{{.Arch}}</td>
+					<td>
+						<a class="download" data-href="/stats/{{$.Org}}/{{$.Name}}/{{$.Branch}}/{{.OS}}/{{.Arch}}"
+							href="{{.Link}}">Download</a>
+					</td>
+				</tr>
+				{{end}}
+			</table>
+		</div>
+		<hr>
+		{{template "footer" .}}
 		<div id="footer">
 			<a href="/">homepage</a>
 			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>
 		</div>
 	</div>
+	<script src="//cdn.bootcss.com/moment.js/2.10.6/moment.min.js"></script>
+	<!--
 	<script src="/components/moment/moment.js"></script>
+	<script src="/jquery.min.js"></script>
+	-->
 	<script>
 		$(function(){
+			$("div.downloads").hide();
 			var $updateAt = $("#update-at");
 			$.getJSON(location.protocol+"{{.BuildJSON}}")
 				.success(function(res){
 					var upTime = moment.unix(res.update_time);
 					var fromNow = upTime.fromNow();
-					$updateAt.text(fromNow);
+					var format = res.format || "single";
 
+					$updateAt.text(fromNow);
 					$("#goversion").text(res.go_version);
+					$("#format").text(format);
+					$("#comment").text(res.comment || "");
+
+					$("div.downloads").show();
+
+					// should add a loading page
+					$("a.download").click(function(){
+						var statsLink = $(this).attr("data-href");
+						console.log(statsLink);
+						$.post(statsLink, function(res){
+							console.log(res);
+						});
+					}).each(function(){
+						var href = $(this).attr("href");
+						if (format != ""){
+							if (href.substr(-4) == '.exe') {
+								href = href.substr(0, href.length-4)
+							}
+							href = href + "." + format;
+						}
+						$(this).attr("href", href);
+					});
 				})
 				.error(function(res){
-					$("div.build-info").hide();
+					//$("div.build-info").hide();
+					$("div.downloads").html("<h1>Downloads not avaliable</h1>").show();
 				});
 		});
 	</script>
