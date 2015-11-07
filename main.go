@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"html/template"
 	"log"
@@ -11,17 +10,13 @@ import (
 	"github.com/Unknwon/macaron"
 	"github.com/gorelease/gorelease/models"
 	"github.com/gorelease/gorelease/models/goutils"
-	"github.com/gorelease/gorelease/public"
 	"github.com/gorelease/gorelease/routers"
-	"github.com/gorelease/gorelease/templates"
 	"github.com/gorelease/oauth2"
-	"github.com/macaron-contrib/bindata"
 	"github.com/macaron-contrib/session"
 	goauth2 "golang.org/x/oauth2"
 	redis "gopkg.in/redis.v3"
 )
 
-var debug = flag.Bool("debug", false, "enable debug mode")
 var rdx *redis.Client
 
 func init() {
@@ -43,15 +38,17 @@ type Publish struct {
 	Link   string
 }
 
+// generate each os-arch address
 func (r *Repo) Pub(goos, arch string) *Publish {
-	link := goutils.StrFormat("http://{domain}/gorelease/{org}/{name}/{branch}/{os}-{arch}/{name}", map[string]interface{}{
-		"domain": r.Domain,
-		"org":    r.Org,
-		"name":   r.Name,
-		"branch": r.Branch,
-		"os":     goos,
-		"arch":   arch,
-	})
+	link := goutils.StrFormat("http://{domain}/gorelease/{org}/{name}/{branch}/{os}-{arch}/{name}",
+		map[string]interface{}{
+			"domain": r.Domain,
+			"org":    r.Org,
+			"name":   r.Name,
+			"branch": r.Branch,
+			"os":     goos,
+			"arch":   arch,
+		})
 	if goos == "windows" {
 		link += ".exe"
 	}
@@ -63,30 +60,31 @@ func (r *Repo) Pub(goos, arch string) *Publish {
 	}
 }
 
-func useBindata(app *macaron.Macaron) {
-	app.Use(macaron.Static("public",
-		macaron.StaticOptions{
-			FileSystem: bindata.Static(bindata.Options{
-				Asset:      public.Asset,
-				AssetDir:   public.AssetDir,
-				AssetNames: public.AssetNames,
-				Prefix:     "",
-			}),
-		},
-	))
+// func useBindata(app *macaron.Macaron) {
+// 	app.Use(macaron.Static("public",
+// 		macaron.StaticOptions{
+// 			FileSystem: bindata.Static(bindata.Options{
+// 				Asset:      public.Asset,
+// 				AssetDir:   public.AssetDir,
+// 				AssetNames: public.AssetNames,
+// 				Prefix:     "",
+// 			}),
+// 		},
+// 	))
 
-	app.Use(macaron.Renderer(macaron.RenderOptions{
-		TemplateFileSystem: bindata.Templates(bindata.Options{
-			Asset:      templates.Asset,
-			AssetDir:   templates.AssetDir,
-			AssetNames: templates.AssetNames,
-			Prefix:     "",
-		}),
-	}))
-}
+// 	app.Use(macaron.Renderer(macaron.RenderOptions{
+// 		TemplateFileSystem: bindata.Templates(bindata.Options{
+// 			Asset:      templates.Asset,
+// 			AssetDir:   templates.AssetDir,
+// 			AssetNames: templates.AssetNames,
+// 			Prefix:     "",
+// 		}),
+// 	}))
+// }
 
-func InitApp(debug bool) *macaron.Macaron {
+func InitApp() *macaron.Macaron {
 	app := macaron.Classic()
+	app.Use(macaron.Static("public"))
 	app.Use(session.Sessioner())
 	app.Use(oauth2.Github(
 		&goauth2.Config{
@@ -97,21 +95,28 @@ func InitApp(debug bool) *macaron.Macaron {
 		},
 	))
 
-	if debug {
-		app.Use(macaron.Renderer())
-	} else {
-		useBindata(app)
-	}
+	app.Use(macaron.Renderer())
 
 	app.Get("/", routers.Homepage)
 	app.Get("/token", oauth2.LoginRequired, routers.Token)
 	app.Post("/stats/:org/:name/:branch/:os/:arch", routers.DownloadStats)
 
 	app.Get("/:org/:name", func(ctx *macaron.Context, r *http.Request) {
-		//org := ctx.Params(":org")
+		org := ctx.Params(":org")
 		//name := ctx.Params(":name")
-		//branch := "master"
+		if org == "js" {
+			ctx.Next()
+			return
+		}
 		ctx.Redirect(r.RequestURI+"/"+"master", 302)
+	})
+
+	// fs := http.FileServer(http.Dir("public"))
+	// app.Get("/js/*", fs)
+
+	app.Get("/api/apps", routers.ApiApplications)
+	app.Get("/apps", func(ctx *macaron.Context) {
+		ctx.HTML(200, "apps", nil)
 	})
 
 	app.Get("/:org/:name/:branch", func(ctx *macaron.Context, r *http.Request) {
@@ -123,10 +128,6 @@ func InitApp(debug bool) *macaron.Macaron {
 		repoPath := org + "/" + name
 		domain := "dn-gobuild5.qbox.me"
 		buildJson := fmt.Sprintf("//%s/gorelease/%s/%s/%s/%s", domain, org, name, branch, "builds.json")
-
-		//rdx.Incr("pageview:" + repoPath)
-		//pv, _ := rdx.Get("pageview:" + repoPath).Int64()
-		//ctx.Data["PageView"] = pv
 
 		ctx.Data["DlCount"], _ = rdx.Get("downloads:" + repoPath).Int64()
 		ctx.Data["Org"] = org
@@ -154,11 +155,10 @@ func InitApp(debug bool) *macaron.Macaron {
 }
 
 func main() {
-	flag.Parse()
 	if err := rdx.Ping().Err(); err != nil {
 		log.Fatal(err)
 	}
-	app := InitApp(*debug)
+	app := InitApp()
 
 	port := 4000
 	fmt.Sscanf(os.Getenv("PORT"), "%d", &port)

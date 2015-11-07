@@ -9,10 +9,6 @@ import (
 	"github.com/gorelease/oauth2"
 )
 
-func init() {
-	//time.Sleep(time.Hour *1)
-}
-
 func Token(tokens oauth2.Tokens, ctx *macaron.Context, req *http.Request) {
 	gh := github.New(tokens.Access())
 	user, err := gh.User()

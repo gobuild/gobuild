@@ -1,0 +1,21 @@
+{{template "header" .}}
+<script src="/js/apps.js"></script>
+<body>
+	{{template "nav" .}}
+	<div class="container" ng-controller="MainCtrl">
+		<table class="table">
+			<tr>
+				<th>Name</th>
+				<th>Download</th>
+			</tr>
+			<tr ng-repeat='repo in repos | orderBy: "-download_count"'>
+				<td>{{`{{repo.name}}`}}</td>
+				<td>{{`{{repo.download_count}}`}}</td>
+			</tr>
+		</table>
+
+	</div>
+	{{template "analysis" .}}
+	{{template "forkme" .}}
+</body>
+</html>

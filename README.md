@@ -107,7 +107,7 @@ Redis storage.
 	# download page PV
 	
 
-redis data backup can use: <https://github.com/p/redis-dump-load>
+redis data backup can use: <https://github.com/p/redis-dump-load>, or see a [script](scripts/redisdl.py)
 
 ## Contribute
 All pull request and suggestions are welcomed. Just make sure the you have tested the code.
