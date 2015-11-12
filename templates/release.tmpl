@@ -93,7 +93,7 @@
 				.success(function(res){
 					var upTime = moment.unix(res.update_time);
 					var fromNow = upTime.fromNow();
-					var format = res.format || "single";
+					var format = "zip"; //res.format || "single";
 
 					$updateAt.text(fromNow);
 					$("#goversion").text(res.go_version);
