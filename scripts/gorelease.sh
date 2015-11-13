@@ -13,9 +13,8 @@ set -o pipefail
 
 echo "Is Pull Request: $TRAVIS_PULL_REQUEST"
 
-# FIXME(ssx): only support go1.5 now
 # Set environment variables
-GORELEASE_GO_VERSION="1.5"
+GORELEASE_GO_VERSION=${TRAVIS_GO_VERSION:-"1.5"}
 BUILD_OS=${1:-"windows linux darwin"}
 TMPDIR=$PWD/gorelease-temp
 BRANCH=
