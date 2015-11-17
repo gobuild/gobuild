@@ -31,6 +31,10 @@ type Hook struct {
 	} `json:"config"`
 }
 
+func (h *Hook) String() string {
+	return fmt.Sprintf("Hook %s: %s [%s]", h.Name, h.Config.Url, h.Config.ContentType)
+}
+
 type User struct {
 	Login   string `json:"login"`
 	Name    string `json:"name"`

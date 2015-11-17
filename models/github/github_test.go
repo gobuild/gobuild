@@ -20,6 +20,8 @@ func TestGetUser(t *testing.T) {
 	Convey("Should get hooks", t, func() {
 		hooks, err := gh.Hooks("codeskyblue", "fswatch")
 		So(err, ShouldBeNil)
-		t.Log(hooks)
+		for _, hook := range hooks {
+			t.Log(hook)
+		}
 	})
 }
