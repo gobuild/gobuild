@@ -90,7 +90,7 @@ func InitApp() *macaron.Macaron {
 		&goauth2.Config{
 			ClientID:     os.Getenv("GITHUB_CLIENT_ID"),
 			ClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
-			Scopes:       []string{"user:email", "public_repo"},
+			Scopes:       []string{"user:email", "public_repo", "write:repo_hook"},
 			RedirectURL:  "",
 		},
 	))
