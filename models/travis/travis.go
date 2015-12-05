@@ -11,7 +11,7 @@ type TravisConfig struct {
 	Notifications struct {
 		Email struct {
 			Recipients []string `yaml:"recipients"`
-			OnSuccess  string   `yaml:"on_success"` // change, always
+			OnSuccess  string   `yaml:"on_success"` // change, always, never
 			OnFailure  string   `yaml:"on_failure"`
 		} `yaml:"email"`
 	} `yaml:"notifications"`
