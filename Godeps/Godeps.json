@@ -11,16 +11,8 @@
 			"Rev": "635c89ac7410dd20df967e37e8f7f173e126cedd"
 		},
 		{
-			"ImportPath": "github.com/elazarl/go-bindata-assetfs",
-			"Rev": "d5cac425555ca5cf00694df246e04f05e6a55150"
-		},
-		{
 			"ImportPath": "github.com/gorelease/oauth2",
 			"Rev": "7639baf617561a890d3f0feccbd98d9ac206d1f7"
-		},
-		{
-			"ImportPath": "github.com/macaron-contrib/bindata",
-			"Rev": "8034104f1486732c68b88433eaac22a20ee9040a"
 		},
 		{
 			"ImportPath": "github.com/macaron-contrib/session",
@@ -55,6 +47,10 @@
 			"ImportPath": "gopkg.in/redis.v3",
 			"Comment": "v3.2.10",
 			"Rev": "eef3fd78ef0f78e8406339c27fd46c6af93f24ba"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "53feefa2559fb8dfa8d81baad31be332c97d6c77"
 		}
 	]
 }
