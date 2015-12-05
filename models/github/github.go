@@ -1,11 +1,15 @@
 package github
 
 import (
+	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type Github struct {
@@ -52,30 +56,34 @@ type Repository struct {
 }
 
 type ErrReturn struct {
-	Message    string `json:"message"`
-	StatusCode int
+	Message     string `json:"message"`
+	StatusCode  int    `json:"-"`
+	DocumentURL string `json:"documentation_url"`
 }
 
 func (e *ErrReturn) Error() string {
 	return fmt.Sprintf("code = %d, msg = %s", e.StatusCode, e.Message)
 }
 
-func (t *Github) decode(apiPath string, query url.Values, v interface{}) error {
+func (t *Github) doRequest(method, apiPath string, query url.Values, body io.Reader, v interface{}) error {
 	u := &url.URL{
 		Scheme: "https",
 		Path:   "api.github.com" + apiPath,
 	}
-	if query == nil {
-		query = u.Query()
+
+	if query != nil {
+		u.RawQuery = query.Encode()
 	}
-	query.Set("access_token", t.token)
-	u.RawQuery = query.Encode()
-	resp, err := http.Get(u.String())
+	client := &http.Client{}
+
+	req, _ := http.NewRequest(method, u.String(), body)
+	req.Header.Set("Authorization", "token "+t.token)
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
-
 	dec := json.NewDecoder(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		er := &ErrReturn{
@@ -84,14 +92,21 @@ func (t *Github) decode(apiPath string, query url.Values, v interface{}) error {
 		dec.Decode(er)
 		return er
 	}
+	if v == nil {
+		return nil
+	}
 	return dec.Decode(v)
 }
 
-//func (t *Github) loopDecode(api string, type
+func (t *Github) doGet(apiPath string, query url.Values, v interface{}) error {
+	return t.doRequest("GET", apiPath, query, nil, v)
+}
+
+//func (t *Github) loopdoGet(api string, type
 
 func (t *Github) User() (user *User, err error) {
 	user = new(User)
-	err = t.decode("/user", nil, user)
+	err = t.doGet("/user", nil, user)
 	return
 }
 
@@ -102,7 +117,7 @@ func (t *Github) Repositories() (repos []*Repository, err error) {
 	for {
 		var rs []*Repository
 		q.Set("page", strconv.Itoa(page))
-		err = t.decode("/user/repos", q, &rs)
+		err = t.doGet("/user/repos", q, &rs)
 		if err != nil {
 			return repos, err
 		}
@@ -122,7 +137,7 @@ func (t *Github) Hooks(owner, repo string) (hooks []*Hook, err error) {
 	for {
 		var rs []*Hook
 		q.Set("page", strconv.Itoa(page))
-		err = t.decode(fmt.Sprintf("/repos/%s/%s/hooks", owner, repo), q, &rs)
+		err = t.doGet(fmt.Sprintf("/repos/%s/%s/hooks", owner, repo), q, &rs)
 		if err != nil {
 			return hooks, err
 		}
@@ -133,4 +148,59 @@ func (t *Github) Hooks(owner, repo string) (hooks []*Hook, err error) {
 		page += 1
 	}
 	return
+}
+
+type CommitFile struct {
+	Path    string `json:"-"`
+	Message string `json:"message"`
+	Content string `json:"content"`
+	Branch  string `json:"branch"` // optional, default master
+	Sha     string `json:"sha"`
+}
+
+func NewCommitFile(path string, message, content, branch string) *CommitFile {
+	if branch == "" {
+		branch = "master"
+	}
+	fmt.Println(content)
+	return &CommitFile{
+		Path:    strings.TrimPrefix(path, "/"),
+		Message: message,
+		Content: base64.StdEncoding.EncodeToString([]byte(content)),
+		Branch:  branch,
+	}
+}
+
+type FileContent struct {
+	Type        string `json:"type"`
+	Sha         string `json:"sha"`
+	Name        string `json:"name"`
+	Path        string `json:"path"`
+	Size        uint64 `json:"size"`
+	Encoding    string `json:"encoding"`
+	DownloadURL string `json:"download_url"`
+}
+
+// ref
+// https://developer.github.com/v3/repos/contents/#update-a-file
+
+func (t *Github) GetFile(owner, repo string, path string) (*FileContent, error) {
+	fc := new(FileContent)
+	err := t.doGet(fmt.Sprintf("/repos/%s/%s/contents/%s",
+		owner, repo, path), nil, fc)
+	return fc, err
+}
+
+func (t *Github) UpdateFile(owner, repo string, file *CommitFile) error {
+	fc, err := t.GetFile(owner, repo, file.Path)
+	if err != nil {
+		return err
+	}
+	file.Sha = fc.Sha
+
+	data, _ := json.Marshal(file)
+	rd := bytes.NewBuffer(data)
+	return t.doRequest("PUT",
+		fmt.Sprintf("/repos/%s/%s/contents/%s", owner, repo, file.Path),
+		nil, rd, nil)
 }

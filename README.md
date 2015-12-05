@@ -63,6 +63,8 @@ Just change the download link.
 	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/your-repo-download-page)
 
 ## How to run this project
+[How to generate github token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
+
 To run this project you need a redis-server. Addr and Password are read from ENV
 
 	REDIS_ADDR=localhost:6379

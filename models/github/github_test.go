@@ -25,3 +25,14 @@ func TestGetUser(t *testing.T) {
 		}
 	})
 }
+
+func TestUpdateFile(t *testing.T) {
+	gh := New(TOKEN)
+	Convey("Should update file success", t, func() {
+		err := gh.UpdateFile("codeskyblue", "cgotest", NewCommitFile(
+			"README.md",
+			"my updated file contents",
+			"my updated file contents", ""))
+		So(err, ShouldBeNil)
+	})
+}
