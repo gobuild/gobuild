@@ -11,6 +11,7 @@ import (
 	"github.com/gorelease/gorelease/models"
 	"github.com/gorelease/gorelease/models/goutils"
 	"github.com/gorelease/gorelease/routers"
+	"github.com/gorelease/gorelease/routers/api"
 	"github.com/gorelease/oauth2"
 	"github.com/macaron-contrib/session"
 	goauth2 "golang.org/x/oauth2"
@@ -115,9 +116,16 @@ func InitApp() *macaron.Macaron {
 	// fs := http.FileServer(http.Dir("public"))
 	// app.Get("/js/*", fs)
 
-	app.Get("/api/apps", routers.ApiApplications)
-	app.Get("/apps", func(ctx *macaron.Context) {
-		ctx.HTML(200, "apps", nil)
+	// api
+	app.Get("/api/apps", api.Applications)
+	app.Post("/api/builds", oauth2.LoginRequired, api.TriggerBuild)
+	app.Get("/api/repos", oauth2.LoginRequired, api.RepoList)
+
+	app.Get("/explore", func(ctx *macaron.Context) {
+		ctx.HTML(200, "explore", nil)
+	})
+	app.Get("/repos", func(ctx *macaron.Context) {
+		ctx.HTML(200, "repos", nil)
 	})
 
 	app.Get("/:org/:name/:branch", func(ctx *macaron.Context, r *http.Request) {

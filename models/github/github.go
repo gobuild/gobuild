@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/gorelease/gorelease/models/goutils"
 )
 
 type Github struct {
@@ -155,7 +157,6 @@ type CommitFile struct {
 	Message string `json:"message"`
 	Content string `json:"content"`
 	Branch  string `json:"branch"` // optional, default master
-	Sha     string `json:"sha"`
 }
 
 func NewCommitFile(path string, message, content, branch string) *CommitFile {
@@ -185,6 +186,7 @@ type FileContent struct {
 // https://developer.github.com/v3/repos/contents/#update-a-file
 
 func (t *Github) GetFile(owner, repo string, path string) (*FileContent, error) {
+	path = strings.TrimPrefix(path, "/")
 	fc := new(FileContent)
 	err := t.doGet(fmt.Sprintf("/repos/%s/%s/contents/%s",
 		owner, repo, path), nil, fc)
@@ -196,11 +198,20 @@ func (t *Github) UpdateFile(owner, repo string, file *CommitFile) error {
 	if err != nil {
 		return err
 	}
-	file.Sha = fc.Sha
+	var commitBody = map[string]string{}
+	commitBody["sha"] = fc.Sha
+	commitBody["message"] = file.Message
+	commitBody["content"] = base64.StdEncoding.EncodeToString([]byte(file.Content))
+	if file.Branch != "" {
+		commitBody["branch"] = file.Branch
+	}
 
-	data, _ := json.Marshal(file)
+	data, _ := json.Marshal(commitBody)
 	rd := bytes.NewBuffer(data)
 	return t.doRequest("PUT",
-		fmt.Sprintf("/repos/%s/%s/contents/%s", owner, repo, file.Path),
+		goutils.StrFormat("/repos/{owner}/{repo}/contents/{path}", map[string]interface{}{
+			"owner": owner,
+			"repo":  repo,
+			"path":  file.Path}),
 		nil, rd, nil)
 }
