@@ -97,7 +97,9 @@ func InitApp() *macaron.Macaron {
 		},
 	))
 
-	app.Use(macaron.Renderer())
+	app.Use(macaron.Renderer(macaron.RenderOptions{
+		Delims: macaron.Delims{"{[", "]}"},
+	}))
 
 	app.Get("/", routers.Homepage)
 	app.Get("/token", oauth2.LoginRequired, routers.Token)

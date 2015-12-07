@@ -1,6 +1,6 @@
-{{template "header" .}}
+{[template "header" .]}
 <body>
-	{{template "nav" .}}
+	{[template "nav" .]}
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -10,15 +10,15 @@
 			<div class="col-md-12">
 				<h2>Top Downloads</h2>
 				<ul>
-					<li><a href="//{{.Host}}/gorelease/gorelease">gorelease/<b>gorelease</b></li>
-					<li><a href="//{{.Host}}/codeskyblue/gogs">codeskyblue/<b>gogs</b></li>
+					<li><a href="//{[.Host]}/gorelease/gorelease">gorelease/<b>gorelease</b></li>
+					<li><a href="//{[.Host]}/codeskyblue/gogs">codeskyblue/<b>gogs</b></li>
 				</ul>
 				<a href="/apps">More ...</a>
 			</div>
 			<hr>
-			{{template "forkme" .}}
-			{{template "footer" .}}
-			{{template "analysis" .}}
+			{[template "forkme" .]}
+			{[template "footer" .]}
+			{[template "analysis" .]}
 		<div>
 	</div>
 </body>
