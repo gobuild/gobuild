@@ -1,4 +1,4 @@
-{{template "header" .}}
+{[template "header" .]}
 <script>
 $(function(){
 	$(document).on("click", "input.click-select", function(e) {
@@ -7,12 +7,12 @@ $(function(){
 });
 </script>
 <body>
-	{{template "nav" .}}
+	{[template "nav" .]}
 	<div class="container">
-		<p> user: {{.User.Name}}</p>
+		<p> user: {[.User.Name]}</p>
 		<div class="input-group">
 			<span class="input-group-addon">GRTOKEN</span>
-			<input type="text" class="click-select form-control" value='{{.Token}}'>
+			<input type="text" class="click-select form-control" value='{[.Token]}'>
         </div>
         <div>   
             <a href="https://travis-ci.org" target="_blank">Goto Travis</a>
@@ -44,13 +44,13 @@ script:
 		<div>
 			<a href="/token?refresh=true" class="btn btn-info btn-xm">Refresh</a>
 			<ul>
-				{{range .Repos}}
+				{[range .Repos]}
 				<li>
-					<a href="https://github.com/{{.Fullname}}">github</a>
-					<a href="https://travis-ci.org/{{.Fullname}}/settings">travis</a>
-					<a style="color: black" href="/{{.Fullname}}">{{.Fullname}}</a>
+					<a href="https://github.com/{[.Fullname]}">github</a>
+					<a href="https://travis-ci.org/{[.Fullname]}/settings">travis</a>
+					<a style="color: black" href="/{[.Fullname]}">{[.Fullname]}</a>
 				</li>
-				{{end}}
+				{[end]}
 			</ul>
 		</div>
 		<div id="footer">
@@ -58,7 +58,7 @@ script:
 			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>
 		</div>
 	</div>
-	{{template "analysis" .}}
-	{{template "forkme" .}}
+	{[template "analysis" .]}
+	{[template "forkme" .]}
 </body>
 </html>
