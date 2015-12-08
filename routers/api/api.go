@@ -71,3 +71,7 @@ func RepoList(tokens oauth2.Tokens, ctx *macaron.Context) {
 	}
 	ctx.JSON(200, repos)
 }
+
+func UserInfo(user *models.User, ctx *macaron.Context) {
+	ctx.JSON(200, user)
+}

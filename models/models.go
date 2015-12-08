@@ -9,25 +9,25 @@ import (
 )
 
 type User struct {
-	Id          int64
-	Name        string
-	Email       string `xorm:"unique"`
-	GithubToken string `xorm:"github_token"`
-	Admin       bool
+	Id          int64  `json:"id"`
+	Name        string `json:"name"`
+	Email       string `xorm:"unique" json:"email"`
+	GithubToken string `xorm:"github_token" json:"github_token"`
+	Admin       bool   `json:"admin"`
 
-	CreatedAt time.Time `xorm:"created"`
-	UpdatedAt time.Time `xorm:"updated"`
+	CreatedAt time.Time `xorm:"created" json:"created_at"`
+	UpdatedAt time.Time `xorm:"updated" json:"updated_at"`
 }
 
 type Repository struct {
-	Id        int64
-	Owner     string `xorm:"unique(nn)"`
-	Repo      string `xorm:"unique(nn)" unique(offcial)`
-	UserId    uint64 `xorm:"'user_id'"`
-	Official  bool   `xorm:"unique(offcial)"`
-	Download  uint64
-	CreatedAt time.Time `xorm:"created"`
-	UpdatedAt time.Time `xorm:"updated"`
+	Id        int64     `json:"id"`
+	Owner     string    `xorm:"unique(nn)" json:"owner"`
+	Repo      string    `xorm:"unique(nn) unique(offcial)" json:"repo"`
+	UserId    uint64    `xorm:"'user_id'" json:"-"`
+	Official  bool      `xorm:"unique(offcial)" json:"official"`
+	Download  uint64    `json:"download"`
+	CreatedAt time.Time `xorm:"created" json:"created_at"`
+	UpdatedAt time.Time `xorm:"updated" json:"updated_at"`
 	// OSArch []OSArch
 }
 
