@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Unknwon/macaron"
+	"github.com/gorelease/gorelease/models"
 	"github.com/gorelease/gorelease/models/github"
 	"github.com/gorelease/gorelease/models/goutils"
 	"github.com/gorelease/oauth2"
@@ -16,6 +17,14 @@ func Token(tokens oauth2.Tokens, ctx *macaron.Context, req *http.Request) {
 		ctx.Error(500, err.Error())
 		return
 	}
+
+	muser := &models.User{
+		Name:        user.Name,
+		Email:       user.Email,
+		GithubToken: tokens.Access(),
+		Admin:       false,
+	}
+	models.DB.Insert(muser)
 
 	// repos
 	var repos []*github.Repository

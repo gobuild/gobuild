@@ -11,6 +11,21 @@
 			"Rev": "635c89ac7410dd20df967e37e8f7f173e126cedd"
 		},
 		{
+			"ImportPath": "github.com/go-sql-driver/mysql",
+			"Comment": "v1.2-125-gd512f20",
+			"Rev": "d512f204a577a4ab037a1816604c48c9c13210be"
+		},
+		{
+			"ImportPath": "github.com/go-xorm/core",
+			"Comment": "v0.4.4-1-gacb6f00",
+			"Rev": "acb6f00daf10d838c98599c81562f65c850dfbde"
+		},
+		{
+			"ImportPath": "github.com/go-xorm/xorm",
+			"Comment": "v0.4.4-24-ga8fba4d",
+			"Rev": "a8fba4d3d9f91edaf3d7cd51bbcb893e5f6ba7e8"
+		},
+		{
 			"ImportPath": "github.com/gorelease/oauth2",
 			"Rev": "7639baf617561a890d3f0feccbd98d9ac206d1f7"
 		},
