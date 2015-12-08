@@ -9,7 +9,7 @@ import (
 )
 
 type User struct {
-	Id          uint64
+	Id          int64
 	Name        string
 	Email       string `xorm:"unique"`
 	GithubToken string `xorm:"github_token"`
@@ -20,7 +20,7 @@ type User struct {
 }
 
 type Repository struct {
-	Id        uint64
+	Id        int64
 	Owner     string `xorm:"unique(nn)"`
 	Repo      string `xorm:"unique(nn)" unique(offcial)`
 	UserId    uint64 `xorm:"'user_id'"`
