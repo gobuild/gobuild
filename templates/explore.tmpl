@@ -10,7 +10,7 @@
 				<th>Download</th>
 			</tr>
 			<tr ng-repeat='repo in repos | orderBy: "-download_count"'>
-				<td>{{repo.name}}</td>
+				<td><a href="/{{repo.name}}">{{repo.name}}</a></td>
 				<td>{{repo.download_count}}</td>
 			</tr>
 		</table>
