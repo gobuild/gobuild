@@ -61,28 +61,6 @@ func (r *Repo) Pub(goos, arch string) *Publish {
 	}
 }
 
-// func useBindata(app *macaron.Macaron) {
-// 	app.Use(macaron.Static("public",
-// 		macaron.StaticOptions{
-// 			FileSystem: bindata.Static(bindata.Options{
-// 				Asset:      public.Asset,
-// 				AssetDir:   public.AssetDir,
-// 				AssetNames: public.AssetNames,
-// 				Prefix:     "",
-// 			}),
-// 		},
-// 	))
-
-// 	app.Use(macaron.Renderer(macaron.RenderOptions{
-// 		TemplateFileSystem: bindata.Templates(bindata.Options{
-// 			Asset:      templates.Asset,
-// 			AssetDir:   templates.AssetDir,
-// 			AssetNames: templates.AssetNames,
-// 			Prefix:     "",
-// 		}),
-// 	}))
-// }
-
 func InitApp() *macaron.Macaron {
 	app := macaron.Classic()
 	app.Use(macaron.Static("public"))

@@ -1,6 +1,8 @@
 package models
 
-import "gopkg.in/redis.v3"
+import (
+	redis "gopkg.in/redis.v3"
+)
 
 var rdx *redis.Client
 
