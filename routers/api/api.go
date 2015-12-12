@@ -59,7 +59,19 @@ func TriggerBuild(tokens oauth2.Tokens, ctx *macaron.Context) {
 	})
 }
 
-func RepoList(user *models.User, ctx *macaron.Context) {
+func RepoList(ctx *macaron.Context) {
+	var repos []models.Repository
+
+	// TODO: change limit to paginate
+	err := models.DB.Limit(100).Where("valid=?", true).Desc("updated_at").Find(&repos)
+	if err != nil {
+		ctx.Error(500, err.Error())
+		return
+	}
+	ctx.JSON(200, repos)
+}
+
+func UserRepoList(user *models.User, ctx *macaron.Context) {
 	if ctx.Req.Method == "POST" {
 		if time.Since(user.RepoUpdatedAt) > time.Minute {
 			if err := user.SyncGithub(); err != nil {
@@ -126,7 +138,9 @@ func RepoBuild(user *models.User, ctx *macaron.Context) {
 		}
 
 		repo.TriggerAt = time.Now()
-		models.DB.Id(repo.Id).Update(repo)
+		repo.Valid = true
+		log.Println("%v", repo)
+		models.DB.Id(repo.Id).Cols("trigger_at", "valid").Update(repo)
 
 		go func() {
 			err := models.TriggerTravisBuild(repo.Owner, repo.Repo, branch, user.Email)
@@ -155,6 +169,16 @@ func RepoBuild(user *models.User, ctx *macaron.Context) {
 	ctx.JSON(500, map[string]string{
 		"message": fmt.Sprintf("Method %s not supported", ctx.Req.Method),
 	})
+}
+
+func RecentBuild(ctx *macaron.Context) {
+	var repos []models.Repository
+	err := models.DB.Limit(10).Desc("trigger_at").Where("valid=?", true).Find(&repos)
+	if err != nil {
+		ctx.Error(500, err.Error())
+		return
+	}
+	ctx.JSON(200, repos)
 }
 
 func UserInfo(user *models.User, ctx *macaron.Context) {

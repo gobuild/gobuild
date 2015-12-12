@@ -6,18 +6,25 @@
 		<div class="row">
 			<div class="col-md-12">
 				<p>Golang cross build your code in github and publish it.</p>
-				<p>See <a href="https://github.com/codeskyblue/gorelease">doc</a> to join into gorelease</p>
+				<p>use <a href="https://github.com/gorelease/gopack">gopack</a> to perform golang build</p>
 			</div>
 			<div class="col-md-12">
-				<h2>Top Downloads</h2>
-				<ul>
-					<li><a href="//{[.Host]}/gorelease/gorelease">gorelease/<b>gorelease</b></li>
-					<li><a href="//{[.Host]}/codeskyblue/gogs">codeskyblue/<b>gogs</b></li>
-				</ul>
-				<a href="/apps">More ...</a>
+				<h4>Recent builds</h4>
+				<table class="table">
+					<tr>
+						<th>Name</th>
+						<th>Time</th>
+					</tr>
+					<tr ng-repeat='x in repos'>
+						<td>
+							<a href="/{{x.owner}}/{{x.repo}}">{{x.owner}}/{{x.repo}}</a>
+							<small>master</small>
+						</td>
+						<td>{{x.trigger_at | fromNow }}</td>
+					</tr>
+				</table>
 			</div>
 			<hr>
-			{[template "base/forkme" .]}
 			{[template "footer" .]}
 			{[template "base/analysis" .]}
 		<div>

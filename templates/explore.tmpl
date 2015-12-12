@@ -6,14 +6,13 @@
 		<table class="table">
 			<tr>
 				<th>Name</th>
-				<th>Download</th>
+				<th>Official</th>
 			</tr>
-			<tr ng-repeat='repo in repos | orderBy: "-download_count"'>
-				<td><a href="/{{repo.name}}">{{repo.name}}</a></td>
-				<td>{{repo.download_count}}</td>
+			<tr ng-repeat='x in repos | orderBy: "-download"'>
+				<td><a href="/{{x.owner}}/{{x.repo}}">{{x.owner}}/{{x.repo}}</a></td>
+				<td>{{x.offcial ? "true" : "false"}}</td>
 			</tr>
 		</table>
-
 	</div>
 	{[template "base/analysis" .]}
 	{[template "base/forkme" .]}

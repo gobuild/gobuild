@@ -6,7 +6,10 @@
 		<div class="row">
 			<div class="col-md-6">
 				<div>
-					<dl>
+					<div ng-show='loading'>
+						Loading ...
+					</div>
+					<dl ng-show='!loading'>
 						<dt>Username</dt>
 						<dd>{{username}}</dd>
 						<dt>Total</dt>
@@ -58,8 +61,6 @@
 		</div>
 	</div>
 	{[template "base/analysis" .]}
-	{[template "base/forkme" .]}
-
 	<script>
 	$(function(){
 		$(document).on("click", "input.click-select", function(e) {

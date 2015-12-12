@@ -9,11 +9,12 @@ angular.module('ngApp', ['ngNotify'])
 		$scope.isAdmin = false;
 		$scope.username = '';
 		$scope.email = '';
+		$scope.loading = true;
 
 		var loadRepos = function(){
-			$http({
+			return $http({
 				method: "GET",
-				url: "/api/repos"
+				url: "/api/user/repos"
 			}).then(function(res){
 				$scope.repos = res.data;
 			}, function(err){
@@ -21,17 +22,19 @@ angular.module('ngApp', ['ngNotify'])
 			})
 		}
 
-		loadRepos()
+		loadRepos().then(function(){
+			$scope.loading = false;
+		})
 		$scope.refresh = function() {
 			$scope.message = "syncing ...";
 			$http({
 				method: "POST",
-				url: "/api/repos"
+				url: "/api/user/repos"
 			}).then(function(res){
 				$scope.message = res.data.message;
 				loadRepos()
 			}, function(err){
-				$scope.message = err;
+				$scope.message = err.data;
 				console.log(err)
 			})
 		}

@@ -96,8 +96,10 @@ func InitApp() *macaron.Macaron {
 
 	// api
 	app.Get("/api/apps", api.Applications)
+	app.Get("/api/repos", api.RepoList)
+	app.Get("/api/recent/repos", api.RecentBuild)
 	app.Post("/api/builds", oauth2.LoginRequired, api.TriggerBuild)
-	app.Any("/api/repos", oauth2.LoginRequired, middleware.UserNeeded, api.RepoList)
+	app.Any("/api/user/repos", oauth2.LoginRequired, middleware.UserNeeded, api.UserRepoList)
 
 	// accept PUT(callback), POST(trigger build)
 	app.Any("/api/repos/:id/build", oauth2.LoginRequired, middleware.UserNeeded, api.RepoBuild)

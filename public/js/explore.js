@@ -2,10 +2,13 @@
 
 angular.module('ngApp', [])
 	.controller('MainCtrl', function($scope, $http){
-		$scope.name = 'world'
 		$scope.repos = {}
-		$http.get('/api/apps')
-			.success(function(res){
-				$scope.repos = res;
-			})
+		$http({
+			method: "GET",
+			url: "/api/repos"
+		}).then(function(res){
+			$scope.repos = res.data;
+		}, function(err){
+			console.log(err)
+		})
 	})
