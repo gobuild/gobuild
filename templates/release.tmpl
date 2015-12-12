@@ -1,8 +1,9 @@
 {[template "base/header" .]}
+<script src="/js/release.js"></script>
 <body>
 	{[template "base/nav" .]}
 	<script src="/components/clipboard/dist/clipboard.min.js"></script>
-	<div class="container">
+	<div class="container" ng-controller="MainCtrl">
 		<h1>{[.Name]} <small>{[.Branch]}</small></h1>
 		<div id="badge">
 			<h3>Badge</h3>

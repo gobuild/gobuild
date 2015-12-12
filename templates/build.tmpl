@@ -1,42 +1,57 @@
 {[template "base/header" .]}
-<script src="/js/angular.min.js"></script>
 <script src="/js/build.js"></script>
-
 <body>
 	{[template "base/nav" .]}
 	<div class="container" ng-controller="MainCtrl">
-		<p> user: {[.User.Name]}</p>
-		<div class="input-group">
-			<span class="input-group-addon">GRTOKEN</span>
-			<input type="text" class="click-select form-control" value='{[.Token]}'>
-        </div>
-        <div>   
-            <a href="https://travis-ci.org" target="_blank">Goto Travis</a>
-        </div>
-        <div>
-            <h4>Example of <small>.gopack.yml</small></h4>
-            <pre>author: shengxiang
-description: '...'
-includes:
-  - README.md
-  - LICENSE
-  - conf
-  - templates
-  - public
-excludes:
-  - \.git
-script:
-  - godep go build</pre>
-        </div>
-		<div>
-			<a href="/token?refresh=true" class="btn btn-info btn-xm">Refresh</a>
-			<ul>
-				<li ng-repeat='x in repos'>
-					<a href="https://github.com/{{x.owner}}/{{x.repo}}">github</a>
-					<a style="color: black" href="/{{x.owner}}/{{x.repo}}">{{x.owner}}/{{x.repo}}</a>
-				</li>
-			</ul>
+		<div class="row">
+			<div class="col-md-6">
+				<div>
+					<dl>
+						<dt>Username</dt>
+						<dd>{{username}}</dd>
+						<dt>Total</dt>
+						<dd>{{repos.length}}</dd>
+						<dt>Last update</dt>
+						<dd>
+							{{buildSinceLast}}
+							<button ng-click='refresh()' class='btn btn-default btn-sm'>Refresh</button>
+							<span>{{message}}</span>
+						</dd>
+					</dl>
+				</div>
+				<div>
+					<div class="input-group">
+						<span class="input-group-addon">
+							Quick search
+						</span>
+						<input type="text" class="form-control" ng-model='search'/>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<table class="table">
+					<tr>
+						<th>Name</th>
+						<th>Links</th>
+						<th>Actions</th>
+					</tr>
+					<tr ng-repeat='x in repos | filter : search'>
+						<td>
+							<a style="color: black" href="/{{x.owner}}/{{x.repo}}">{{x.repo}}</a>
+							<small>{{x.owner}}</small>
+						</td>
+						<td>
+							<a href="/{{x.owner}}/{{x.repo}}">download</a>
+						</td>
+						<td>
+							<button class="btn btn-default btn-sm" ng-click='build(x)'>Build</button>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
+
 		<div id="footer">
 			<a href="/">homepage</a>
 			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>

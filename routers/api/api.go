@@ -118,6 +118,16 @@ func RepoBuild(user *models.User, ctx *macaron.Context) {
 	}
 	branch := ctx.Req.FormValue("branch")
 	if ctx.Req.Method == "POST" {
+		dur := time.Since(repo.TriggerAt)
+		var limitTime = time.Minute * 10
+		if dur < limitTime { // too offen is not good
+			ctx.Error(500, fmt.Sprintf("Too offen, retry after %v", limitTime-dur))
+			return
+		}
+
+		repo.TriggerAt = time.Now()
+		models.DB.Id(repo.Id).Update(repo)
+
 		go func() {
 			err := models.TriggerTravisBuild(repo.Owner, repo.Repo, branch, user.Email)
 			if err != nil {

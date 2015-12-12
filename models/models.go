@@ -33,7 +33,7 @@ type Repository struct {
 	Download  uint64    `json:"download"`
 	CreatedAt time.Time `xorm:"created" json:"created_at"`
 	UpdatedAt time.Time `xorm:"updated" json:"updated_at"`
-	// OSArch []OSArch
+	TriggerAt time.Time `json:"trigger_at"`
 }
 
 var DB *xorm.Engine
@@ -84,7 +84,10 @@ func (user *User) SyncGithub() error {
 		}
 	}
 	user.RepoUpdatedAt = time.Now()
-	DB.Update(user, user)
+	_, err = DB.Id(user.Id).Update(user)
+	if err != nil {
+		log.Println(err)
+	}
 	return nil
 }
 
