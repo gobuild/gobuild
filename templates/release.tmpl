@@ -1,6 +1,6 @@
-{[template "header" .]}
+{[template "base/header" .]}
 <body>
-	{[template "nav" .]}
+	{[template "base/nav" .]}
 	<script src="/components/clipboard/dist/clipboard.min.js"></script>
 	<div class="container">
 		<h1>{[.Name]} <small>{[.Branch]}</small></h1>
@@ -126,6 +126,6 @@
 				});
 		});
 	</script>
-	{[template "analysis" .]}
+	{[template "base/analysis" .]}
 </body>
 </html>
