@@ -2,10 +2,12 @@ package models
 
 import (
 	"log"
+	"strings"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
+	"github.com/gorelease/gorelease/models/github"
 )
 
 type User struct {
@@ -15,16 +17,19 @@ type User struct {
 	GithubToken string `xorm:"github_token" json:"github_token"`
 	Admin       bool   `json:"admin"`
 
-	CreatedAt time.Time `xorm:"created" json:"created_at"`
-	UpdatedAt time.Time `xorm:"updated" json:"updated_at"`
+	CreatedAt     time.Time `xorm:"created" json:"created_at"`
+	UpdatedAt     time.Time `xorm:"updated" json:"updated_at"`
+	RepoUpdatedAt time.Time `json:"repo_updated_at"`
 }
 
 type Repository struct {
 	Id        int64     `json:"id"`
 	Owner     string    `xorm:"unique(nn)" json:"owner"`
-	Repo      string    `xorm:"unique(nn) unique(offcial)" json:"repo"`
-	UserId    uint64    `xorm:"'user_id'" json:"-"`
-	Official  bool      `xorm:"unique(offcial)" json:"official"`
+	Repo      string    `xorm:"unique(nn)" json:"repo"`
+	UserId    int64     `xorm:"'user_id'" json:"-"`
+	Refs      []string  `json:"refs"` // can be branch or tag
+	Valid     bool      `json:"valid"`
+	Official  bool      `json:"official"`
 	Download  uint64    `json:"download"`
 	CreatedAt time.Time `xorm:"created" json:"created_at"`
 	UpdatedAt time.Time `xorm:"updated" json:"updated_at"`
@@ -42,4 +47,55 @@ func init() {
 	if err = DB.Sync(new(User), new(Repository)); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func (user *User) SyncGithub() error {
+	gh := github.New(user.GithubToken)
+	repos, err := gh.Repositories()
+	if err != nil {
+		return err
+	}
+
+	for _, ghRepo := range repos {
+		parts := strings.Split(ghRepo.Fullname, "/")
+		if len(parts) != 2 {
+			continue
+		}
+		var repo = &Repository{
+			Owner: parts[0],
+			Repo:  parts[1],
+		}
+		exists, err := DB.Get(repo)
+		if err != nil {
+			return err
+		}
+		repo.UserId = user.Id
+		if exists {
+			repoId := repo.Id
+			_, err := DB.Update(repo, &Repository{Id: repoId})
+			if err != nil {
+				return err
+			}
+		} else {
+			_, err := DB.Insert(repo)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	user.RepoUpdatedAt = time.Now()
+	DB.Update(user, user)
+	return nil
+}
+
+func (user *User) Repositories() ([]Repository, error) {
+	var repos []Repository
+	err := DB.Find(&repos, &Repository{UserId: user.Id})
+	return repos, err
+}
+
+func (r *Repository) AddBranch(name string) error {
+	// CDN_URL_BASE + "/"
+	// r.Branches
+	return nil
 }

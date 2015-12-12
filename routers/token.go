@@ -10,7 +10,7 @@ import (
 	"github.com/gorelease/oauth2"
 )
 
-func Token(tokens oauth2.Tokens, ctx *macaron.Context, req *http.Request) {
+func Build(tokens oauth2.Tokens, ctx *macaron.Context, req *http.Request) {
 	gh := github.New(tokens.Access())
 	user, err := gh.User()
 	if err != nil {
@@ -59,5 +59,5 @@ func Token(tokens oauth2.Tokens, ctx *macaron.Context, req *http.Request) {
 	ctx.Data["User"] = user
 	ctx.Data["Token"] = token
 	ctx.Data["Repos"] = repos
-	ctx.HTML(200, "token")
+	ctx.HTML(200, "build")
 }

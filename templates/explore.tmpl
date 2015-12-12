@@ -1,8 +1,8 @@
-{[template "header" .]}
+{[template "base/header" .]}
 <script src="/js/angular.min.js"></script>
-<script src="/js/apps.js"></script>
+<script src="/js/explore.js"></script>
 <body>
-	{[template "nav" .]}
+	{[template "base/nav" .]}
 	<div class="container" ng-controller="MainCtrl">
 		<table class="table">
 			<tr>
@@ -16,7 +16,7 @@
 		</table>
 
 	</div>
-	{[template "analysis" .]}
-	{[template "forkme" .]}
+	{[template "base/analysis" .]}
+	{[template "base/forkme" .]}
 </body>
 </html>

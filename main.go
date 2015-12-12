@@ -81,7 +81,7 @@ func InitApp() *macaron.Macaron {
 	}))
 
 	app.Get("/", routers.Homepage)
-	app.Get("/token", oauth2.LoginRequired, routers.Token)
+	app.Get("/build", oauth2.LoginRequired, routers.Build)
 	app.Post("/stats/:org/:name/:branch/:os/:arch", routers.DownloadStats)
 
 	app.Get("/:org/:name", func(ctx *macaron.Context, r *http.Request) {
@@ -97,7 +97,11 @@ func InitApp() *macaron.Macaron {
 	// api
 	app.Get("/api/apps", api.Applications)
 	app.Post("/api/builds", oauth2.LoginRequired, api.TriggerBuild)
-	app.Get("/api/repos", oauth2.LoginRequired, api.RepoList)
+	app.Any("/api/repos", oauth2.LoginRequired, middleware.UserNeeded, api.RepoList)
+
+	// accept PUT(callback), POST(trigger build)
+	app.Any("/api/repos/:id/build", oauth2.LoginRequired, middleware.UserNeeded, api.RepoBuild)
+
 	app.Get("/api/user", oauth2.LoginRequired, middleware.UserNeeded, api.UserInfo)
 
 	app.Get("/explore", func(ctx *macaron.Context) {

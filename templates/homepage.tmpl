@@ -1,7 +1,9 @@
-{[template "header" .]}
+{[template "base/header" .]}
+<script src="/js/angular.min.js"></script>
+<script src="/js/homepage.js"></script>
 <body>
-	{[template "nav" .]}
-	<div class="container">
+	{[template "base/nav" .]}
+	<div class="container" ng-controller="MainCtrl">
 		<div class="row">
 			<div class="col-md-12">
 				<p>Golang cross build your code in github and publish it.</p>
@@ -16,9 +18,9 @@
 				<a href="/apps">More ...</a>
 			</div>
 			<hr>
-			{[template "forkme" .]}
+			{[template "base/forkme" .]}
 			{[template "footer" .]}
-			{[template "analysis" .]}
+			{[template "base/analysis" .]}
 		<div>
 	</div>
 </body>

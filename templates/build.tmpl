@@ -1,14 +1,10 @@
-{[template "header" .]}
-<script>
-$(function(){
-	$(document).on("click", "input.click-select", function(e) {
-		$(e.target).select();
-	});
-});
-</script>
+{[template "base/header" .]}
+<script src="/js/angular.min.js"></script>
+<script src="/js/build.js"></script>
+
 <body>
-	{[template "nav" .]}
-	<div class="container">
+	{[template "base/nav" .]}
+	<div class="container" ng-controller="MainCtrl">
 		<p> user: {[.User.Name]}</p>
 		<div class="input-group">
 			<span class="input-group-addon">GRTOKEN</span>
@@ -16,15 +12,6 @@ $(function(){
         </div>
         <div>   
             <a href="https://travis-ci.org" target="_blank">Goto Travis</a>
-            <p>After you enable your repo in travis, create two files <code>.travis.yml .gopack.yml</code> in your repo</p>
-            <h4>Example of <small>.travis.yml</small></h4>
-            <pre>language: go
-go:
-  - 1.5
-script:
-  - go test -v ./...
-after_success:
-  - bash -c "$(curl -fsSL http://bitly.com/gorelease)" gorelease</pre>
         </div>
         <div>
             <h4>Example of <small>.gopack.yml</small></h4>
@@ -44,13 +31,10 @@ script:
 		<div>
 			<a href="/token?refresh=true" class="btn btn-info btn-xm">Refresh</a>
 			<ul>
-				{[range .Repos]}
-				<li>
-					<a href="https://github.com/{[.Fullname]}">github</a>
-					<a href="https://travis-ci.org/{[.Fullname]}/settings">travis</a>
-					<a style="color: black" href="/{[.Fullname]}">{[.Fullname]}</a>
+				<li ng-repeat='x in repos'>
+					<a href="https://github.com/{{x.owner}}/{{x.repo}}">github</a>
+					<a style="color: black" href="/{{x.owner}}/{{x.repo}}">{{x.owner}}/{{x.repo}}</a>
 				</li>
-				{[end]}
 			</ul>
 		</div>
 		<div id="footer">
@@ -58,7 +42,15 @@ script:
 			&copy;Powered by <a href="https://github.com/codeskyblue/gorelease">gorelease</a>
 		</div>
 	</div>
-	{[template "analysis" .]}
-	{[template "forkme" .]}
+	{[template "base/analysis" .]}
+	{[template "base/forkme" .]}
+
+	<script>
+	$(function(){
+		$(document).on("click", "input.click-select", function(e) {
+			$(e.target).select();
+		});
+	});
+	</script>
 </body>
 </html>
