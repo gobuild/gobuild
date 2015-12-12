@@ -84,7 +84,7 @@ func (user *User) SyncGithub() error {
 		}
 	}
 	user.RepoUpdatedAt = time.Now()
-	_, err = DB.Id(user.Id).Update(user)
+	_, err = DB.Id(user.Id).Cols("repo_updated_at").Update(user)
 	if err != nil {
 		log.Println(err)
 	}
