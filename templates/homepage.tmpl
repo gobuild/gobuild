@@ -5,8 +5,21 @@
 	<div class="container" ng-controller="MainCtrl">
 		<div class="row">
 			<div class="col-md-12">
-				<p>Golang cross build your code in github and publish it.</p>
+				<p>Golang cross build your <strong>github</strong> code and build it.</p>
 				<p>use <a href="https://github.com/gorelease/gopack">gopack</a> to perform golang build</p>
+			</div>
+			<div class="col-md-12">
+				<form class="form" ng-submit='addRepository(fullname)'>
+					<label>Add your repository</label>
+					<div class="input-group">
+		      			<div class="input-group-addon">https://github.com/</div>
+						<input type="text" ng-model='fullname' class="form-control click-select" 
+							placeholder="owner/repo" />
+						<div class="input-group-btn">
+							<button type="submit" class="btn btn-default">Add</button>
+						</div>
+					</div>
+				</form>
 			</div>
 			<div class="col-md-12">
 				<h4>Recent builds</h4>

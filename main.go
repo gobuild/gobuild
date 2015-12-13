@@ -95,16 +95,17 @@ func InitApp() *macaron.Macaron {
 	})
 
 	// api
-	app.Get("/api/apps", api.Applications)
-	app.Get("/api/repos", api.RepoList)
-	app.Get("/api/recent/repos", api.RecentBuild)
-	app.Post("/api/builds", oauth2.LoginRequired, api.TriggerBuild)
-	app.Any("/api/user/repos", oauth2.LoginRequired, middleware.UserNeeded, api.UserRepoList)
+	app.Group("/api", func() {
+		app.Get("/repos", api.RepoList)
+		app.Post("/repos", api.AnonymousTriggerBuild)
+		app.Any("/user/repos", oauth2.LoginRequired, middleware.UserNeeded, api.UserRepoList)
+		app.Get("/recent/repos", api.RecentBuild)
+		app.Post("/builds", oauth2.LoginRequired, api.TriggerBuild)
 
-	// accept PUT(callback), POST(trigger build)
-	app.Any("/api/repos/:id/build", oauth2.LoginRequired, middleware.UserNeeded, api.RepoBuild)
-
-	app.Get("/api/user", oauth2.LoginRequired, middleware.UserNeeded, api.UserInfo)
+		// accept PUT(callback), POST(trigger build)
+		app.Any("/repos/:id/build", oauth2.LoginRequired, middleware.UserNeeded, api.RepoBuild)
+		app.Get("/user", oauth2.LoginRequired, middleware.UserNeeded, api.UserInfo)
+	})
 
 	app.Get("/explore", func(ctx *macaron.Context) {
 		ctx.HTML(200, "explore", nil)
