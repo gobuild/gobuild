@@ -5,6 +5,12 @@
 	<script src="/components/clipboard/dist/clipboard.min.js"></script>
 	<div class="container" ng-controller="MainCtrl">
 		<h1>{[.Name]} <small>{[.Branch]}</small></h1>
+		<form class="form">
+			<div class="input-group">
+      			<div class="input-group-addon">Install command</div>
+				<input type="text" class="form-control click-select" value="gopack install {[.Org]}/{[.Name]}"/>
+			</div>
+		</form>
 		<div id="badge">
 			<h3>Badge</h3>
 			<span><img src="//dn-gorelease.qbox.me/gorelease-download-blue.svg"></span>
@@ -13,6 +19,9 @@
 				<span class="input-group-btn">
 					<button data-clipboard-target="#md-badge-addr" class="btn btn-default btn-copy" alt="Copy success" type="button">Copy</button>
 				</span>
+			</div>
+			<div>
+				
 			</div>
 		</div>
 		<div class="build-info">

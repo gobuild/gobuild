@@ -1,0 +1,7 @@
+User-agent: *
+
+Disallow: /api/
+Disallow: /3party/
+Disallow: /download/
+Disallow: /*.css$
+Disallow: /*.js$

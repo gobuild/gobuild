@@ -14,7 +14,7 @@ type User struct {
 	Id          int64  `json:"id"`
 	Name        string `json:"name"`
 	Email       string `xorm:"unique" json:"email"`
-	GithubToken string `xorm:"github_token" json:"github_token"`
+	GithubToken string `xorm:"github_token" json:"-"`
 	Admin       bool   `json:"admin"`
 
 	CreatedAt     time.Time `xorm:"created" json:"created_at"`
