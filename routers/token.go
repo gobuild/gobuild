@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/Unknwon/macaron"
-	"github.com/gorelease/gorelease/models"
-	"github.com/gorelease/gorelease/models/github"
-	"github.com/gorelease/gorelease/models/goutils"
+	"github.com/gobuild/gorelease/models"
+	"github.com/gobuild/gorelease/models/github"
+	"github.com/gobuild/gorelease/models/goutils"
 	"github.com/gorelease/oauth2"
 )
 

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/gorelease/gorelease/models/github"
-	"github.com/gorelease/gorelease/models/travis"
+	"github.com/gobuild/gorelease/models/github"
+	"github.com/gobuild/gorelease/models/travis"
 	yaml "gopkg.in/yaml.v2"
 )
 

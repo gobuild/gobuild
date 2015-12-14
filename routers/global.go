@@ -1,5 +1,5 @@
 package routers
 
-import "github.com/gorelease/gorelease/models"
+import "github.com/gobuild/gorelease/models"
 
 var rdx = models.GetRedisClient()

@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"github.com/Unknwon/macaron"
-	"github.com/gorelease/gorelease/models"
-	"github.com/gorelease/gorelease/models/github"
+	"github.com/gobuild/gorelease/models"
+	"github.com/gobuild/gorelease/models/github"
 	"github.com/gorelease/oauth2"
 )
 
