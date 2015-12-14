@@ -1,4 +1,4 @@
-# gorelease
+# gobuild web
 [![Build Status](https://travis-ci.org/gorelease/gorelease.svg?branch=master)](https://travis-ci.org/gorelease/gorelease)
 [![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/gorelease/gorelease)
 
@@ -6,7 +6,7 @@ For easily build go cross platform online and share your binary.
 
 With this project help you will have a download page. ex: <http://gorelease.herokuapp.com/gorelease/gorelease>
 
-## How to use gorelease
+## How to use
 It is very simple to use gorelease. Before doing everything, make sure this repo have integrate with <https://travis-ci.org>
 
 Add two lines to your `travis.yml`.
@@ -63,7 +63,7 @@ Just change the download link.
 	[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](http://gorelease.herokuapp.com/your-repo-download-page)
 
 ## How to run this project
-[How to generate github token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
+First [generate github token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
 
 To run this project you need a redis-server. Addr and Password are read from ENV
 
@@ -71,11 +71,14 @@ To run this project you need a redis-server. Addr and Password are read from ENV
 	REDIS_PASSWORD=""
 	GITHUB_CLIENT_ID=12...
 	GITHUB_CLIENT_SECRET=l213.....
+    GITHUB_TOKEN=...
+    MYSQL_URI=...
 
 Use redis db:0
 
+    $ bower install
 	$ go build
-	$ ./gorelease -debug	
+	$ ./gorelease
 
 ## Design
 Redis storage.

@@ -1,1 +1,1 @@
-web: gorelease
+web: scripts/run
