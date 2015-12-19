@@ -5,25 +5,46 @@
 	<script src="/components/clipboard/dist/clipboard.min.js"></script>
 	<div class="container" ng-controller="MainCtrl">
 		<h1>{[.Name]} <small>{[.Branch]}</small></h1>
+		<div>
+			<a href="https://github.com/{[.Org]}/{[.Name]}">github</a>
+			<span data-toggle="modal" data-target="#gobuild-badge">
+				<img src="//dn-gorelease.qbox.me/gorelease-download-blue.svg">
+			</span>
+		</div>
+		<br/>
 		<form class="form">
 			<div class="input-group">
-      			<div class="input-group-addon">Install command</div>
+						<div class="input-group-addon">Install command</div>
 				<input type="text" class="form-control click-select" value="gopack install {[.Org]}/{[.Name]}"/>
 			</div>
 		</form>
-		<div id="badge">
-			<h3>Badge</h3>
-			<span><img src="//dn-gorelease.qbox.me/gorelease-download-blue.svg"></span>
-			<div class="input-group">
-				<input id="md-badge-addr" type="text" class="form-control" value=""/>
-				<span class="input-group-btn">
-					<button data-clipboard-target="#md-badge-addr" class="btn btn-default btn-copy" alt="Copy success" type="button">Copy</button>
-				</span>
-			</div>
-			<div>
-				
+
+		<!-- badge modal -->
+		<div class="modal fade" id="gobuild-badge">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4>Badge</h4>
+					</div>
+					<div class="modal-body">
+						<img src="//dn-gorelease.qbox.me/gorelease-download-blue.svg">
+						<div class="input-group">
+							<input id="md-badge-addr" type="text" class="form-control" 
+								value="[![gorelease](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](https://gobuild.io/{[.Org]}/{[.Name]})"/>
+							<span class="input-group-btn">
+								<button data-clipboard-target="#md-badge-addr" class="btn btn-default btn-copy" alt="Copy success" type="button">Copy</button>
+							</span>
+						</div>
+					</div>
+					<div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
 			</div>
 		</div>
+
 		<div class="build-info">
 			<table>
 				<tr>
