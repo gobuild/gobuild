@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"github.com/Unknwon/macaron"
-	"github.com/gobuild/gorelease/models"
-	"github.com/gobuild/gorelease/models/github"
-	"github.com/gorelease/oauth2"
+	"github.com/gobuild/gobuild/models"
+	"github.com/gobuild/gobuild/models/github"
+	"github.com/gobuild/oauth2"
 )
 
 func UserNeeded(tokens oauth2.Tokens, ctx *macaron.Context) {

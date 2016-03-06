@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/Unknwon/macaron"
-	"github.com/gobuild/gorelease/models"
-	"github.com/gobuild/gorelease/models/github"
-	"github.com/gobuild/gorelease/models/goutils"
-	"github.com/gorelease/oauth2"
+	"github.com/gobuild/gobuild/models"
+	"github.com/gobuild/gobuild/models/github"
+	"github.com/gobuild/gobuild/models/goutils"
+	"github.com/gobuild/oauth2"
 )
 
 func Build(tokens oauth2.Tokens, ctx *macaron.Context, req *http.Request) {

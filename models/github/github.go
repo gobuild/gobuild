@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gobuild/gorelease/models/goutils"
+	"github.com/gobuild/gobuild/models/goutils"
 )
 
 type Github struct {

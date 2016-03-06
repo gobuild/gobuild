@@ -7,7 +7,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
-	"github.com/gobuild/gorelease/models/github"
+	"github.com/gobuild/gobuild/models/github"
 )
 
 type User struct {

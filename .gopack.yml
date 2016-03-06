@@ -12,4 +12,5 @@ excludes:
   - \.git
   - .*\.go
 script:
-  - godep go build
+  - go get -v
+  - go build
