@@ -2,9 +2,7 @@
 [![Build Status](https://travis-ci.org/gobuild/gobuild.svg?branch=master)](https://travis-ci.org/gobuild/gobuild)
 [![gobuild-web](https://dn-gorelease.qbox.me/gorelease-download-blue.svg)](https://gobuild.io/gobuild/gobuild)
 
-For easily build go cross platform online and share your binary.
-
-With this project help you will have a download page. ex: <https://gobuild.io/gobuild/gopack>
+<https://gobuild.io> helps compile your github Go project into binary which you can easily download and share to your friend. An example download page: <https://gobuild.io/gobuild/gopack>
 
 ## How to use
 1. Open browser <https://gobuild.io>
@@ -12,7 +10,7 @@ With this project help you will have a download page. ex: <https://gobuild.io/go
 3. Wait for some minute, the binary will be packaged done.
 
 ## Adanvanced
-1. Define how to the build process.
+1. Define how to specify the build command.
 
 	You need install `gopack` before doing anything.
 
