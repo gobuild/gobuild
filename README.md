@@ -9,7 +9,7 @@
 2. Enter your repository name in the web.
 3. Wait for some minute, the binary will be packaged done.
 
-## Adanvanced
+## Advanced
 1. Define how to specify the build command.
 
 	You need install `gopack` before doing anything.
