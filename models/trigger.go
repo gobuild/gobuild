@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	DefaultTriggerOwner = "gorelease"
+	DefaultTriggerOwner = "gobuild"
 	DefaultTriggerRepo  = "travis-autobuild"
 )
 

@@ -22,7 +22,7 @@ type TravisConfig struct {
 
 var DefaultTravisConfig = TravisConfig{
 	Language: "go",
-	Go:       []string{"1.5"},
+	Go:       []string{"1.6"},
 	Script: []string{
 		// "sed -n '340,355p' /home/travis/build.sh",
 		"bash build.sh",
